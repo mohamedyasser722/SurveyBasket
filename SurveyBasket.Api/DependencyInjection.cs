@@ -2,7 +2,7 @@
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDependencies(this IServiceCollection Services)
+    public static IServiceCollection AddDependencies(this IServiceCollection Services,IConfiguration Configuration)
     {
         // Add services to the container.
 
@@ -14,8 +14,8 @@ public static class DependencyInjection
 
         Services.AddScoped<IPollService, PollService>();
         Services.RegisterMapsterConfiguration();
-
         Services.AddFluentValidation();
+        Services.AddDataBase(Configuration);
 
         #endregion
 
@@ -38,4 +38,12 @@ public static class DependencyInjection
         return Services;
     }
 
+    public static IServiceCollection AddDataBase(this IServiceCollection Services, IConfiguration Configuration)
+    {
+        var connectionString = Configuration.GetConnectionString("DefaultConnection") ??
+           throw new InvalidOperationException("Connection String 'DefaultConnection' not found");
+        Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+        return Services;
+    }
 }

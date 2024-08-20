@@ -1,4 +1,6 @@
-﻿namespace SurveyBasket.Api.Mapping;
+﻿using SurveyBasket.Api.Entities;
+
+namespace SurveyBasket.Api.Mapping;
 
 public static class MappingFunctions
 {
