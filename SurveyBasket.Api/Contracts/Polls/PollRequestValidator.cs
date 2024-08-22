@@ -2,19 +2,19 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace SurveyBasket.Api.Validations;
+namespace SurveyBasket.Api.Contracts.Polls;
 
-public class PollRequestValidator : AbstractValidator<PollRequest>
+public class LoginRequestValidator : AbstractValidator<PollRequest>
 {
     private readonly ApplicationDbContext _context;
-    public PollRequestValidator(ApplicationDbContext context)
+    public LoginRequestValidator(ApplicationDbContext context)
     {
 
         _context = context;
 
         RuleFor(x => x.Title).Cascade(CascadeMode.Stop)     // CascadeMode is to stop the validation on the first failure
             .NotEmpty()
-            .Length(3,100)
+            .Length(3, 100)
             .Must(BeUniqueTitle).WithMessage("A poll with the same title already exists.");
 
         RuleFor(x => x.Summary)
@@ -23,7 +23,8 @@ public class PollRequestValidator : AbstractValidator<PollRequest>
 
         RuleFor(x => x.StartsAt)
             .NotEmpty()
-            .GreaterThanOrEqualTo(DateTime.UtcNow.AddSeconds(30));
+            .GreaterThanOrEqualTo(DateTime.UtcNow.AddSeconds(30))
+            .WithMessage("Start time must be at least 30 seconds in the future. ");
 
         RuleFor(x => x.EndsAt)
             .NotEmpty()

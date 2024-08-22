@@ -6,6 +6,8 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        //builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
+        //    .AddEntityFrameworkStores<ApplicationDbContext>();
 
         builder.Services.AddDependencies(builder.Configuration);
 
@@ -22,6 +24,7 @@ public class Program
 
         app.UseAuthorization();
 
+        //app.MapIdentityApi<ApplicationUser>();
 
         app.MapControllers();
 
