@@ -10,7 +10,20 @@ public static class DependencyInjection
         // Add services to the container.
 
         Services.AddControllers();
-        
+        // allow CORS
+ 
+        Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(
+                builder =>
+                {
+                    builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins(Configuration.GetSection("AllowedOrigins").Get<string[]>());
+                });
+        });
+
         Services.AddSwagger();
 
         #region MyServices
