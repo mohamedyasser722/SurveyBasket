@@ -1,67 +1,53 @@
-﻿namespace SurveyBasket.Api.Controllers;
-
-[Route("[controller]")]
-[ApiController]
-public class AuthController(IAuthService authService) : ControllerBase
+﻿namespace SurveyBasket.Api.Controllers
 {
-    private readonly IAuthService _authService = authService;
-
-    //[HttpPost()]
-    //public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = default)
-    //{
-    //    var response = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
-
-    //    //if (response.IsFailure)
-    //    //    return Problem(statusCode: StatusCodes.Status400BadRequest, title: response.Error.code, detail: response.Error.Description);
-
-    //    //return Ok(response.Value);
-
-    //    return response.Match<IActionResult>(
-    //        authResponse => Ok(authResponse),
-    //        error => Problem(statusCode: StatusCodes.Status400BadRequest, title: error.code, detail: error.Description)
-    //    );
-    //}
-    [HttpPost()]
-    public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = default)
+    [Route("[controller]")]
+    [ApiController]
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        var response = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
+        private readonly IAuthService _authService = authService;
 
-        if (response.IsFailure)
-            return Problem(statusCode: StatusCodes.Status400BadRequest, title: response.Error.code, detail: response.Error.Description);
+        [HttpPost]
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
-        return Ok(response.Value);
-    }
+            if (response.IsFailure)
+                return response.ToProblem();
 
-    [HttpPost("refresh")]
-    public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default)
-    {
-        var response = await _authService.GetRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
+            return Ok(response.Value);
+        }
 
-        if (response.IsFailure)
-            return Problem(statusCode: StatusCodes.Status400BadRequest, title: response.Error.code, detail: response.Error.Description);
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _authService.GetRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
 
-        return Ok(response.Value);
-    }
+            if (response.IsFailure)
+                return response.ToProblem();
 
-    [HttpPost("revoke-refresh-token")]
-    public async Task<IActionResult> RevokeRefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default)
-    {
-        Result isRevoked = await _authService.RevokeRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
+            return Ok(response.Value);
+        }
 
-        if (isRevoked.IsFailure)
-            return Problem(statusCode: StatusCodes.Status400BadRequest, title: isRevoked.Error.code, detail: isRevoked.Error.Description);
+        [HttpPost("revoke-refresh-token")]
+        public async Task<IActionResult> RevokeRefreshTokenAsync([FromBody] RefreshTokenRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _authService.RevokeRefreshTokenAsync(request.Token, request.RefreshToken, cancellationToken);
 
-        return NoContent();
-    }
+            if (response.IsFailure)
+                return response.ToProblem();
 
-    [HttpPost("register")]
-    public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = default)
-    {
-        var response = await _authService.RegisterAsync(request.Email, request.Password, request.FirstName, request.LastName, cancellationToken);
+            return NoContent();
+        }
 
-        if (response is null)
-            return Problem(statusCode: StatusCodes.Status400BadRequest, title: "Invalid Registration", detail: "Invalid email or password");
+        [HttpPost("register")]
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _authService.RegisterAsync(request.Email, request.Password, request.FirstName, request.LastName, cancellationToken);
 
-        return Ok(response);
+            if (response is null)
+                return Problem(statusCode: StatusCodes.Status400BadRequest);
+
+            return Ok(response.Value);
+        }
     }
 }
