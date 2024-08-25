@@ -22,5 +22,9 @@ global using System.Text;
 global using Microsoft.IdentityModel.Tokens;
 global using Microsoft.Extensions.Options;
 global using System.ComponentModel.DataAnnotations;
+global using SurveyBasket.Api.Abstraction;
+global using System.Security.Cryptography;
+global using Microsoft.AspNetCore.Authorization;
+global using SurveyBasket.Api.Errors;
 
 
