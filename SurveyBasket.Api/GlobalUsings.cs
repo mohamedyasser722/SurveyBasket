@@ -26,5 +26,6 @@ global using SurveyBasket.Api.Abstraction;
 global using System.Security.Cryptography;
 global using Microsoft.AspNetCore.Authorization;
 global using SurveyBasket.Api.Errors;
+global using SurveyBasket.Api.Contracts.Questions;
 
 

@@ -19,15 +19,17 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseCors();
-
         app.UseHttpsRedirection();
+
+        app.UseCors();
 
         app.UseAuthorization();
 
-        //app.MapIdentityApi<ApplicationUser>();
-
         app.MapControllers();
+
+        app.UseExceptionHandler();  // new way in from .net 8 and above
+
+        //app.MapIdentityApi<ApplicationUser>();    // old way in .net 7 and below
 
         app.Run();
     }

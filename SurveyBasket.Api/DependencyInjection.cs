@@ -30,11 +30,14 @@ public static class DependencyInjection
 
         Services.AddScoped<IPollService, PollService>();
         Services.AddScoped<IJwtProvider, JwtProvider>();
+        Services.AddScoped<IQuestionService, QuestionService>();
         Services.RegisterMapsterConfiguration();
         Services.AddFluentValidation();
         Services.AddDataBase(Configuration);
         Services.AddAuthConfig(Configuration);
 
+        Services.AddExceptionHandler<GlobalExceptionHandler>();
+        Services.AddProblemDetails();
         #endregion
 
         return Services;

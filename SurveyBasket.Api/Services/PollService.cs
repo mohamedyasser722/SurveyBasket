@@ -8,7 +8,25 @@ public class PollService(ApplicationDbContext context) : IPollService
     private readonly ApplicationDbContext _context = context;
     private readonly DbSet<Poll> _polls = context.Set<Poll>();
 
-    public async Task<IEnumerable<PollResponse>>? GetAllAsync(CancellationToken cancellationToken = default) => _polls.AsNoTracking().ToList().Adapt<IEnumerable<PollResponse>>();
+    public async Task<IEnumerable<PollResponse>>? GetAllAsync(CancellationToken cancellationToken = default)
+    {
+       var polls = await _polls.AsNoTracking().ToListAsync(cancellationToken);
+       return polls.Adapt<IEnumerable<PollResponse>>();
+    }
+    public async Task<IEnumerable<PollResponse>> GetCurrentAsync(CancellationToken cancellationToken = default)
+    {
+        // Convert StartsAt and EndsAt to UTC before comparing
+        // current polls are the polls that are published and the current time is between StartsAt and EndsAt
+        var currentPolls = await _polls
+            .Where(p => p.IsPublished &&
+                        p.StartsAt <= DateTime.UtcNow &&
+                        p.EndsAt >= DateTime.UtcNow)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return currentPolls.Adapt<IEnumerable<PollResponse>>();
+    }
+
 
     public async Task<Result<PollResponse>> GetAsync(int id, CancellationToken cancellationToken = default)
     {
@@ -19,14 +37,18 @@ public class PollService(ApplicationDbContext context) : IPollService
 
         return Result.Success(pollResponse);
     }
-    public async Task<PollResponse> AddAsync(PollRequest pollRequest, CancellationToken cancellationToken = default)
+    public async Task<Result<PollResponse>> AddAsync(PollRequest pollRequest, CancellationToken cancellationToken = default)
     {
+        var isTitleExist = await _polls.AnyAsync(p => p.Title == pollRequest.Title, cancellationToken);
+        if (isTitleExist)
+            return Result.Failure<PollResponse>(PollErrors.PollTitleExist);
+
         Poll Poll = pollRequest.Adapt<Poll>();
         await _polls.AddAsync(Poll, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
 
 
-        return Poll.Adapt<PollResponse>();
+        return Result.Success(Poll.Adapt<PollResponse>());
     }
     public async Task<Result> UpdateAsync(int id, Poll poll, CancellationToken cancellationToken = default)
     {
@@ -35,6 +57,10 @@ public class PollService(ApplicationDbContext context) : IPollService
 
         if (existingPoll == null)
             return Result.Failure(PollErrors.PollNotFound);
+
+        var isTitleExist = await _polls.AnyAsync(p => p.Title == poll.Title && p.Id != id, cancellationToken);
+        if (isTitleExist)
+            return Result.Failure(PollErrors.PollTitleExist);
 
         // Update properties
         existingPoll.Title = poll.Title;

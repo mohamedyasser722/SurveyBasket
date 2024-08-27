@@ -14,8 +14,7 @@ public class LoginRequestValidator : AbstractValidator<PollRequest>
 
         RuleFor(x => x.Title).Cascade(CascadeMode.Stop)     // CascadeMode is to stop the validation on the first failure
             .NotEmpty()
-            .Length(3, 100)
-            .Must(BeUniqueTitle).WithMessage("A poll with the same title already exists.");
+            .Length(3, 100);
 
         RuleFor(x => x.Summary)
             .NotEmpty()
@@ -31,9 +30,5 @@ public class LoginRequestValidator : AbstractValidator<PollRequest>
             .GreaterThanOrEqualTo(x => x.StartsAt);
 
 
-    }
-    private bool BeUniqueTitle(string title)
-    {
-        return !_context.Polls.AsNoTracking().Any(p => p.Title == title);
     }
 }

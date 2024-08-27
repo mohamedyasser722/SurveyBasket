@@ -15,6 +15,12 @@ namespace SurveyBasket.Api.Controllers
             var pollsResponse = await _pollService.GetAllAsync(cancellationToken);
             return Ok(pollsResponse);
         }
+        [HttpGet("current")]
+        public async Task<IActionResult> GetCurrent(CancellationToken cancellationToken = default)
+        {
+            var pollsResponse = await _pollService.GetCurrentAsync(cancellationToken);
+            return Ok(pollsResponse);
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id, CancellationToken cancellationToken = default)
@@ -29,7 +35,12 @@ namespace SurveyBasket.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] PollRequest request, CancellationToken cancellationToken)
         {
-            var pollResponse = await _pollService.AddAsync(request, cancellationToken);
+            var pollResult = await _pollService.AddAsync(request, cancellationToken);
+            if(pollResult.IsFailure)
+                return pollResult.ToProblem();
+
+            var pollResponse = pollResult.Value;
+
             return CreatedAtAction(nameof(Get), new { id = pollResponse.Id }, pollResponse);
         }
 
