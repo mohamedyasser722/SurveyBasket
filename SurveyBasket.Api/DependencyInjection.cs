@@ -31,6 +31,8 @@ public static class DependencyInjection
         Services.AddScoped<IPollService, PollService>();
         Services.AddScoped<IJwtProvider, JwtProvider>();
         Services.AddScoped<IQuestionService, QuestionService>();
+        Services.AddScoped<IVoteService, VoteService>();
+        Services.AddScoped<IResultService, ResultService>();
         Services.RegisterMapsterConfiguration();
         Services.AddFluentValidation();
         Services.AddDataBase(Configuration);

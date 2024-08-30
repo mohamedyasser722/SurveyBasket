@@ -60,6 +60,34 @@ public class QuestionService(ApplicationDbContext context) : IQuestionService
 
         return Result.Success<IEnumerable<QuestionResponse>>(questions);
     }
+    public async Task<Result<IEnumerable<QuestionResponse>>> GetAvailableAsync(int pollId, string userId, CancellationToken cancellationToken = default)
+    {
+        // check if this user has already voted on this poll before or not
+        bool isUserVoted = await _context.Votes.AnyAsync(v => v.PollId == pollId && v.UserId == userId, cancellationToken);
+        if (isUserVoted)
+            return Result.Failure<IEnumerable<QuestionResponse>>(VoteErrors.DuplicatedVoted);
+
+        // check if the poll exists and published and not expired
+        bool isPollExists = await _context.Polls.AnyAsync(p => p.Id == pollId && p.IsPublished && 
+                                                            (p.StartsAt <= DateTime.UtcNow && p.EndsAt >= DateTime.UtcNow)
+                                                            , cancellationToken);
+        if (!isPollExists)
+            return Result.Failure<IEnumerable<QuestionResponse>>(PollErrors.PollNotFound);
+
+        // get all questions for this poll
+        var questions = await _context.Questions
+            .Where(p => p.PollId == pollId && p.IsActive)
+            .Include(q => q.Answers)
+            .Select(q => new QuestionResponse(
+                q.Id,
+                q.Content,
+                q.Answers.Where(a => a.IsActive).Select(a => new AnswerResponse(a.Id, a.Content))
+            ))
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return Result.Success<IEnumerable<QuestionResponse>>(questions);
+    }
     public async Task<Result<QuestionResponse>> GetAsync(int pollId, int questionId, CancellationToken cancellationToken = default)
     {
 

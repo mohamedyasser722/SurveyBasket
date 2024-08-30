@@ -27,5 +27,6 @@ global using System.Security.Cryptography;
 global using Microsoft.AspNetCore.Authorization;
 global using SurveyBasket.Api.Errors;
 global using SurveyBasket.Api.Contracts.Questions;
-
-
+global using SurveyBasket.Api.Extensions;
+global using SurveyBasket.Api.Contracts.Votes;
+global using SurveyBasket.Api.Contracts.Results;
