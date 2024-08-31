@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace SurveyBasket.Api;
 
 public class Program
@@ -11,6 +13,19 @@ public class Program
 
         builder.Services.AddDependencies(builder.Configuration);
 
+        // adding serilog to the application
+        builder.Host.UseSerilog((context, configuration) =>
+        {
+            //configuration
+            //.MinimumLevel.Information()
+            //.WriteTo.Console();
+
+            // i will make it read from the appsettings.json file
+            configuration.ReadFrom
+            .Configuration(context.Configuration);
+
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -19,6 +34,9 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseSerilogRequestLogging();     // makes serilog log the request show the request in the console
+
         app.UseHttpsRedirection();
 
         app.UseCors();

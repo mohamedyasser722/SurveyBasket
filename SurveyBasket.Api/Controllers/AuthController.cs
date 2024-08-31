@@ -2,13 +2,16 @@
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController(IAuthService authService) : ControllerBase
+    public class AuthController(IAuthService authService, ILogger<AuthController> logger) : ControllerBase
     {
         private readonly IAuthService _authService = authService;
+        private readonly ILogger<AuthController> _logger = logger;
 
         [HttpPost]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request, CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("Login request received for {Email} and password: {password}", request.Email, request.Password);
+
             var response = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
             if (response.IsFailure)
