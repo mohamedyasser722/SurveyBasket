@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using SurveyBasket.Api.Services.Services.Interfaces;
 using System.Text;
 
 namespace SurveyBasket.Api;
@@ -10,8 +11,13 @@ public static class DependencyInjection
         // Add services to the container.
 
         Services.AddControllers();
+
+
+        // add caching
+        Services.AddDistributedMemoryCache();
+
         // allow CORS
- 
+
         Services.AddCors(options =>
         {
             options.AddDefaultPolicy(
@@ -33,6 +39,7 @@ public static class DependencyInjection
         Services.AddScoped<IQuestionService, QuestionService>();
         Services.AddScoped<IVoteService, VoteService>();
         Services.AddScoped<IResultService, ResultService>();
+        Services.AddScoped<ICacheService,CacheService>();
         Services.RegisterMapsterConfiguration();
         Services.AddFluentValidation();
         Services.AddDataBase(Configuration);

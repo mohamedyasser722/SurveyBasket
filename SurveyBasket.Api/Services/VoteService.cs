@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SurveyBasket.Api.Contracts.Votes;
+using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Services;
 
