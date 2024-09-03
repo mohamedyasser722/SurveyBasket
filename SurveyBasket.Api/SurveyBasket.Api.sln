@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurveyBasket.Api", "SurveyBasket.Api.csproj", "{0439AF5B-2AFA-49BC-8B37-284BF0CDC39A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0439AF5B-2AFA-49BC-8B37-284BF0CDC39A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0439AF5B-2AFA-49BC-8B37-284BF0CDC39A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0439AF5B-2AFA-49BC-8B37-284BF0CDC39A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0439AF5B-2AFA-49BC-8B37-284BF0CDC39A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91E3778C-57F3-40A9-9F26-E2F0DD2E0F3E}
+	EndGlobalSection
+EndGlobal

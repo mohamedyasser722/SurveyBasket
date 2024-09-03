@@ -33,3 +33,8 @@ global using SurveyBasket.Api.Contracts.Results;
 global using SurveyBasket.Api.Services.Services.Interfaces;
 global using Microsoft.Extensions.Caching.Distributed;
 global using System.Text.Json;
+global using SurveyBasket.Api.Abstraction.Consts;
+global using SurveyBasket.Api.Settings;
+global using Microsoft.OpenApi.Models;
+global using Microsoft.AspNetCore.Identity.UI.Services;
+global using MimeKit;

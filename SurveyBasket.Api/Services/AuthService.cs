@@ -1,14 +1,30 @@
 ﻿
-using OneOf;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
+using SurveyBasket.Api.Helpers;
 using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Services;
 
-public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider jwtProvider, IOptions<JwtOptions> jwtOptions) : IAuthService
+public class AuthService
+
+    (UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
+    IJwtProvider jwtProvider,
+    IOptions<JwtOptions> jwtOptions,
+    ILogger<AuthService> logger,
+    IEmailSender emailSender,
+    IHttpContextAccessor httpContextAccessor) : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly ILogger<AuthService> _logger = logger;
+    private readonly IEmailSender _emailSender = emailSender;
+    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+
+    #region example of Using OneOf for error handling Package
     // using OneOf;
     //public async Task<OneOf<AuthResponse,Error>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
     //{
@@ -23,18 +39,23 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
     //    var Result = await GenerateAuthResponseAsync(user);
     //    return Result.Value;
     //}
+    #endregion
 
     public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
     {
         var user = await _userManager.FindByEmailAsync(email);
+
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-        bool isPasswordCorrect = await _userManager.CheckPasswordAsync(user, password);
-        if (!isPasswordCorrect)
-            return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
+        var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
-        return await GenerateAuthResponseAsync(user);
+        if (result.Succeeded)
+            return await GenerateAuthResponseAsync(user);
+
+        _logger.LogWarning("Failed login attempt for Email: {Email}", email);
+        return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
+
     }
     public async Task<Result<AuthResponse>> GetRefreshTokenAsync(string token, string refreshToken, CancellationToken cancellationToken = default)
     {
@@ -87,21 +108,93 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
     }
 
 
-    public async Task<Result<AuthResponse>> RegisterAsync(string email, string password, string firstName, string lastName, CancellationToken cancellationToken = default)
+    public async Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
     {
+        bool isEmailTaken = await _userManager.FindByEmailAsync(request.Email) is not null;
+
+        if (isEmailTaken)
+            return Result.Failure<AuthResponse>(UserErrors.DuplicatedEmail);
+
         var user = new ApplicationUser
         {
-            Email = email,
-            UserName = email,
-            FirstName = firstName,
-            LastName = lastName
+            Email = request.Email,
+            UserName = request.Email,
+            FirstName = request.FirstName,
+            LastName = request.LastName
         };
 
-        var result = await _userManager.CreateAsync(user, password);
+        var result = await _userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
-            return null;
+        {
+            var error = result.Errors.FirstOrDefault();
+            return Result.Failure<AuthResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
+        }
 
-        return await GenerateAuthResponseAsync(user);
+
+
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);    // Generate a token for email confirmation
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));           // Encode the token to be URL-safe
+
+        _logger.LogInformation("Confirmation Code: {code}", code);
+
+        // TODO: Send the confirmation email with the code
+
+        await sendConfirmationEmail(user, code);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
+    {
+        var user = await _userManager.FindByIdAsync(request.UserId);
+        if (user is null)
+            return Result.Failure(UserErrors.InvalidCode);
+
+        if (user.EmailConfirmed)
+            return Result.Failure(UserErrors.DuplicatedConfirmation);
+
+        var code = request.Code;
+
+        try
+        {
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+        }
+        catch (FormatException)
+        {
+            return Result.Failure(UserErrors.InvalidCode);
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, code);
+
+        if (!result.Succeeded)
+        {
+            var error = result.Errors.FirstOrDefault();
+            return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
+        }
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ResendConfirmationEmailAsync(ResendConfirmationEmailRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user is null)
+            return Result.Success(); // We don't want to leak information about the user's existence
+
+        if (user.EmailConfirmed)
+            return Result.Failure(UserErrors.DuplicatedConfirmation);
+
+        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);    // Generate a token for email confirmation
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));           // Encode the token to be URL-safe
+
+        // TODO: Send the confirmation email with the code
+
+        await sendConfirmationEmail(user, code);
+
+        _logger.LogInformation("Confirmation Code: {code}", code);
+
+        return Result.Success();
+
     }
 
     private async Task<Result<AuthResponse>> GenerateAuthResponseAsync(ApplicationUser user)
@@ -127,5 +220,18 @@ public class AuthService(UserManager<ApplicationUser> userManager, IJwtProvider 
         };
     }
 
-}
+    private async Task sendConfirmationEmail(ApplicationUser user, string code)
+    {
+        var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+        var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation",
 
+                new Dictionary<string, string>
+                {
+                    { "{UserName}", $"{user.FirstName} {user.LastName}"},
+                    { "[CONFIRMATION_LINK]", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
+                }                                                                // also this can be send in header from frontend, and can be set in appsettings.json
+            );
+        await _emailSender.SendEmailAsync(user.Email, "Survey Basket: Email Confirmation ✅", emailBody);
+    }
+
+}

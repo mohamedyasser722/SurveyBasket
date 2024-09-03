@@ -1,8 +1,4 @@
-﻿using Microsoft.OpenApi.Models;
-using SurveyBasket.Api.Services.Services.Interfaces;
-using System.Text;
-
-namespace SurveyBasket.Api;
+﻿namespace SurveyBasket.Api;
 
 public static class DependencyInjection
 {
@@ -40,6 +36,8 @@ public static class DependencyInjection
         Services.AddScoped<IVoteService, VoteService>();
         Services.AddScoped<IResultService, ResultService>();
         Services.AddScoped<ICacheService,CacheService>();
+        Services.AddScoped<IEmailSender, EmailService>();
+        Services.AddHttpContextAccessor();
         Services.RegisterMapsterConfiguration();
         Services.AddFluentValidation();
         Services.AddDataBase(Configuration);
@@ -47,6 +45,8 @@ public static class DependencyInjection
 
         Services.AddExceptionHandler<GlobalExceptionHandler>();
         Services.AddProblemDetails();
+
+        Services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
         #endregion
 
         return Services;
@@ -110,7 +110,8 @@ public static class DependencyInjection
     {
 
         Services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
         Services.AddScoped<IAuthService, AuthService>();
 
@@ -143,6 +144,12 @@ public static class DependencyInjection
             };
         });
 
+        Services.Configure<IdentityOptions>(options =>
+        {
+            options.Password.RequiredLength = 8;
+            options.SignIn.RequireConfirmedEmail = true;
+            options.User.RequireUniqueEmail = true;
+        });
 
         return Services;
     }

@@ -1,4 +1,5 @@
-﻿using SurveyBasket.Api.Services.Services.Interfaces;
+﻿using Azure.Core;
+using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Controllers
 {
@@ -47,12 +48,34 @@ namespace SurveyBasket.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _authService.RegisterAsync(request.Email, request.Password, request.FirstName, request.LastName, cancellationToken);
+            var response = await _authService.RegisterAsync(request, cancellationToken);
 
-            if (response is null)
-                return Problem(statusCode: StatusCodes.Status400BadRequest);
+            if (response.IsFailure)
+                return response.ToProblem();
 
-            return Ok(response.Value);
+            return Ok();
+        }
+
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _authService.ConfirmEmailAsync(request);
+
+            if (response.IsFailure)
+                return response.ToProblem();
+
+            return Ok();
+        }
+
+
+        [HttpPost("resend-confirmation-email")]
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _authService.ResendConfirmationEmailAsync(request);
+            if (response.IsFailure)
+                return response.ToProblem();
+
+            return Ok();
         }
     }
 }
