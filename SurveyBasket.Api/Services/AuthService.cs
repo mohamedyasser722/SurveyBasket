@@ -1,4 +1,5 @@
 ﻿
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using SurveyBasket.Api.Helpers;
@@ -137,7 +138,7 @@ public class AuthService
 
         _logger.LogInformation("Confirmation Code: {code}", code);
 
-        // TODO: Send the confirmation email with the code
+        // Send the confirmation email with the code in background job to avoid blocking the request with hangfire
 
         await sendConfirmationEmail(user, code);
 
@@ -231,7 +232,10 @@ public class AuthService
                     { "[CONFIRMATION_LINK]", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
                 }                                                                // also this can be send in header from frontend, and can be set in appsettings.json
             );
-        await _emailSender.SendEmailAsync(user.Email, "Survey Basket: Email Confirmation ✅", emailBody);
+
+        BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email, "Survey Basket: Email Confirmation ✅", emailBody));
+
+        await Task.CompletedTask;   
     }
 
 }

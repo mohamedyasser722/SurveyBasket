@@ -4,8 +4,9 @@ using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Services;
 
-public class PollService(ApplicationDbContext context) : IPollService
+public class PollService(ApplicationDbContext context, INotificationService notificationService) : IPollService
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly ApplicationDbContext _context = context;
     private readonly DbSet<Poll> _polls = context.Set<Poll>();
 
@@ -88,12 +89,19 @@ public class PollService(ApplicationDbContext context) : IPollService
     }
     public async Task<Result> TogglePublishStatusAsync(int id, CancellationToken cancellationToken = default)
     {
-        var existingPoll = await _polls
-           .FindAsync(id, cancellationToken);
+        var existingPoll = await _polls.FindAsync(id, cancellationToken);
+
         if (existingPoll is null)
             return Result.Failure(PollErrors.PollNotFound);
+
         existingPoll.IsPublished = !existingPoll.IsPublished;
-        await _context.SaveChangesAsync(cancellationToken); 
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        // Send notification if the poll is published and the poll starts today because we have already passed the start date
+        if (existingPoll.IsPublished && existingPoll.StartsAt >= DateTime.UtcNow.Date)
+            BackgroundJob.Enqueue(() => _notificationService.SendNewPollsNotification(existingPoll.Id));
+
         return Result.Success();
     }
 }

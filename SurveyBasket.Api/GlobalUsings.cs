@@ -38,3 +38,6 @@ global using SurveyBasket.Api.Settings;
 global using Microsoft.OpenApi.Models;
 global using Microsoft.AspNetCore.Identity.UI.Services;
 global using MimeKit;
+global using Hangfire.Dashboard;
+global using Hangfire;
+global using SurveyBasket.Api.Helpers;

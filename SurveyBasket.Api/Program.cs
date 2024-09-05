@@ -1,4 +1,7 @@
+using Hangfire;
+using Hangfire.Dashboard;
 using Serilog;
+using SurveyBasket.Api.Hangfire;
 
 namespace SurveyBasket.Api;
 
@@ -8,46 +11,57 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        //builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-        //    .AddEntityFrameworkStores<ApplicationDbContext>();
-
+        // Register necessary services
         builder.Services.AddDependencies(builder.Configuration);
 
-        // adding serilog to the application
+        // Configure Serilog
         builder.Host.UseSerilog((context, configuration) =>
         {
-            //configuration
-            //.MinimumLevel.Information()
-            //.WriteTo.Console();
-
-            // i will make it read from the appsettings.json file
-            configuration.ReadFrom
-            .Configuration(context.Configuration);
-
+            configuration.ReadFrom.Configuration(context.Configuration);
         });
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        // Configure the HTTP request pipeline
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
-        app.UseSerilogRequestLogging();     // makes serilog log the request show the request in the console
+        app.UseSerilogRequestLogging();
 
         app.UseHttpsRedirection();
 
-        app.UseCors();         
+        // Configure Hangfire Dashboard with custom basic authentication
+        app.UseHangfireDashboard("/jobs", new DashboardOptions
+        {
+            Authorization = new[]
+            {
+                new HangfireCustomBasicAuthenticationFilter(
+                    app.Configuration.GetValue<string>("HangfireSettings:Username")!,
+                    app.Configuration.GetValue<string>("HangfireSettings:Password")!)
+            },
+            DashboardTitle = "Survey Basket Dashboard",
+            //IsReadOnlyFunc = context => true          // Uncomment this line to make the hangfire dashboard read-only
+        });
 
+        var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+        using var scope = scopeFactory.CreateScope();
+        var notoficationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
+
+        RecurringJob.AddOrUpdate("SendNewPollsNotification", () =>  notoficationService.SendNewPollsNotification(null), Cron.Daily);
+
+        // Use CORS if needed
+        app.UseCors();
+
+        // Add custom exception handling (new in .NET 8 and above)
+        app.UseExceptionHandler();
+
+        // Map controllers
         app.MapControllers();
 
-        app.UseExceptionHandler();  // new way in from .net 8 and above
-
-        //app.MapIdentityApi<ApplicationUser>();    // old way in .net 7 and below
-
+        // Start the application
         app.Run();
     }
 }
-

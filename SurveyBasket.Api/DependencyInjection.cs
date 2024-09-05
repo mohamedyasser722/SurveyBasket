@@ -1,4 +1,6 @@
-﻿namespace SurveyBasket.Api;
+﻿using Hangfire;
+
+namespace SurveyBasket.Api;
 
 public static class DependencyInjection
 {
@@ -37,6 +39,8 @@ public static class DependencyInjection
         Services.AddScoped<IResultService, ResultService>();
         Services.AddScoped<ICacheService,CacheService>();
         Services.AddScoped<IEmailSender, EmailService>();
+        Services.AddScoped<INotificationService, NotificationService>();
+        Services.AddHangFire(Configuration);
         Services.AddHttpContextAccessor();
         Services.RegisterMapsterConfiguration();
         Services.AddFluentValidation();
@@ -150,6 +154,21 @@ public static class DependencyInjection
             options.SignIn.RequireConfirmedEmail = true;
             options.User.RequireUniqueEmail = true;
         });
+
+        return Services;
+    }
+
+    // register HangFire 
+    public static IServiceCollection AddHangFire(this IServiceCollection Services, IConfiguration Configuration)
+    {
+        Services.AddHangfire(config => config
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection")));
+
+        // Add the processing server as IHostedService
+        Services.AddHangfireServer();
 
         return Services;
     }
