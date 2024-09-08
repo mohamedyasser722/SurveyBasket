@@ -40,6 +40,7 @@ public static class DependencyInjection
         Services.AddScoped<ICacheService,CacheService>();
         Services.AddScoped<IEmailSender, EmailService>();
         Services.AddScoped<INotificationService, NotificationService>();
+        Services.AddScoped<IUserService, UserService>();
         Services.AddHangFire(Configuration);
         Services.AddHttpContextAccessor();
         Services.RegisterMapsterConfiguration();

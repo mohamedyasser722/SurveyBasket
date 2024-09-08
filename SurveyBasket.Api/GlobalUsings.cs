@@ -41,3 +41,4 @@ global using MimeKit;
 global using Hangfire.Dashboard;
 global using Hangfire;
 global using SurveyBasket.Api.Helpers;
+global using SurveyBasket.Api.Contracts.Users;

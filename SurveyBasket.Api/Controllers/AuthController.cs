@@ -71,11 +71,24 @@ namespace SurveyBasket.Api.Controllers
         [HttpPost("resend-confirmation-email")]
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _authService.ResendConfirmationEmailAsync(request);
-            if (response.IsFailure)
-                return response.ToProblem();
+            var result = await _authService.ResendConfirmationEmailAsync(request);
+           
+            return result.IsSuccess? Ok() : result.ToProblem();
+        }
 
-            return Ok();
+        [HttpPost("forget-password")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequest request) 
+        {
+            var result = await _authService.SendResetPasswordCodeAsync(request);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+        }
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var result = await _authService.ResetPasswordAsync(request);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
         }
     }
 }

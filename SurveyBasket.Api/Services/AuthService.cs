@@ -15,7 +15,8 @@ public class AuthService
     IOptions<JwtOptions> jwtOptions,
     ILogger<AuthService> logger,
     IEmailSender emailSender,
-    IHttpContextAccessor httpContextAccessor) : IAuthService
+    IHttpContextAccessor httpContextAccessor,
+    IConfiguration configuration) : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
@@ -24,6 +25,7 @@ public class AuthService
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly IJwtProvider _jwtProvider = jwtProvider;
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
+    private readonly IConfiguration _configuration = configuration;
 
     #region example of Using OneOf for error handling Package
     // using OneOf;
@@ -198,6 +200,62 @@ public class AuthService
 
     }
 
+
+    public async Task<Result> SendResetPasswordCodeAsync(ForgetPasswordRequest request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user is null)
+            return Result.Success(); // We don't want to leak information about the user's existence
+        if(!user.EmailConfirmed)
+            return Result.Failure(UserErrors.EmailNotConfirmed);
+
+        var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        _logger.LogInformation("Reset Password Code: {code}", code);
+
+        await sendResetPasswordEmail(user, code);
+
+        return Result.Success();
+    }
+
+    public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        var user = await _userManager.FindByIdAsync(request.UserId);
+        if (user is null)
+            return Result.Failure(UserErrors.InvalidCode);
+        if (!user.EmailConfirmed)
+            return Result.Failure(UserErrors.EmailNotConfirmed);
+
+        var code = request.Code;
+
+        try
+        {
+            code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+        }
+        catch (FormatException)
+        {
+            return Result.Failure(UserErrors.InvalidCode);
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, code, request.NewPassword);
+
+        if (!result.Succeeded)
+        {
+            var error = result.Errors.FirstOrDefault();
+            return Result.Failure(new Error(error.Code, error.Description, StatusCodes.Status401Unauthorized));
+        }
+
+        return Result.Success();
+    }
+
+
+
+
+
+
+
+
     private async Task<Result<AuthResponse>> GenerateAuthResponseAsync(ApplicationUser user)
     {
         var (token, expiresIn) = _jwtProvider.GenerateToken(user);
@@ -224,6 +282,7 @@ public class AuthService
     private async Task sendConfirmationEmail(ApplicationUser user, string code)
     {
         var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+        //var baseUrl = _configuration["AppSettings:BaseUrl"];
         var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation",
 
                 new Dictionary<string, string>
@@ -238,4 +297,22 @@ public class AuthService
         await Task.CompletedTask;   
     }
 
+    private async Task sendResetPasswordEmail(ApplicationUser user, string code)
+    {
+        var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+        //var baseUrl = _configuration["AppSettings:BaseUrl"];
+        var emailBody = EmailBodyBuilder.GenerateEmailBody("ForgetPassword", 
+
+                new Dictionary<string, string>
+                {
+                    { "{UserName}", $"{user.FirstName} {user.LastName}"},
+                    { "[RESET_PASSWORD_LINK]", $"{origin}/auth/forgetPassword?userId={user.Id}&code={code}" }
+                }                                                                // also this can be send in header from frontend, and can be set in appsettings.json
+            );
+        _logger.LogInformation("Sending email to userId: {userId}", user.Id);
+
+        BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email, "Survey Basket: Reset Password 🔄", emailBody));
+
+        await Task.CompletedTask; 
+    }
 }
