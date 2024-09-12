@@ -1,4 +1,4 @@
-﻿using Hangfire;
+﻿
 
 namespace SurveyBasket.Api;
 
@@ -114,9 +114,12 @@ public static class DependencyInjection
     public static IServiceCollection AddAuthConfig(this IServiceCollection Services,IConfiguration configuration)
     {
 
-        Services.AddIdentity<ApplicationUser, IdentityRole>()
+        Services.AddIdentity<ApplicationUser, ApplicationRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+        Services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+        Services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
         Services.AddScoped<IAuthService, AuthService>();
 

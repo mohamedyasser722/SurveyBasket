@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyBasket.Api.Persistence;
 
@@ -11,9 +12,11 @@ using SurveyBasket.Api.Persistence;
 namespace SurveyBasket.Api.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240910124912_SeedIdentityTables")]
+    partial class SeedIdentityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,98 +53,98 @@ namespace SurveyBasket.Api.Persistence.Migrations
                         new
                         {
                             Id = 1,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "polls:read",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 2,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "polls:add",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 3,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "polls:update",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 4,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "polls:delete",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 5,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "questions:read",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 6,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "questions:add",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 7,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "questions:update",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 8,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "users:read",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 9,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "users:add",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 10,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "users:update",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 11,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "roles:read",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 12,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "roles:add",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 13,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "roles:update",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         },
                         new
                         {
                             Id = 14,
-                            ClaimType = "permissions",
+                            ClaimType = "Permession",
                             ClaimValue = "results:read",
                             RoleId = "B56D430C-0897-4B6D-B611-3AD5D43C8E55"
                         });
@@ -402,7 +405,7 @@ namespace SurveyBasket.Api.Persistence.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SURVEY-BASKET.COM",
                             NormalizedUserName = "ADMIN@SURVEY-BASKET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELYqEk2GMLme4Qxi3/FSLVtBoHVWPub4DL169+1Yu1xKuorFIUIaXhpTdlvVE3wSBA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFCmbjKjuPAVhgkeIMfP6E2EQ92ko4AvzKNWXgQYfJ70N4wpe2vIBUh+brUc6NPN4g==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "A54B66CD079F44D5A8818A9530D5FC78",
                             TwoFactorEnabled = false,

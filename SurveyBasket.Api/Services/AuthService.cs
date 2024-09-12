@@ -10,6 +10,7 @@ namespace SurveyBasket.Api.Services;
 public class AuthService
 
     (UserManager<ApplicationUser> userManager,
+    ApplicationDbContext context,
     SignInManager<ApplicationUser> signInManager,
     IJwtProvider jwtProvider,
     IOptions<JwtOptions> jwtOptions,
@@ -19,6 +20,7 @@ public class AuthService
     IConfiguration configuration) : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly ApplicationDbContext _context = context;
     private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
     private readonly ILogger<AuthService> _logger = logger;
     private readonly IEmailSender _emailSender = emailSender;
@@ -54,7 +56,7 @@ public class AuthService
         var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
         if (result.Succeeded)
-            return await GenerateAuthResponseAsync(user);
+            return await GenerateAuthResponseAsync(user, cancellationToken);
 
         _logger.LogWarning("Failed login attempt for Email: {Email}", email);
         return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
@@ -81,7 +83,7 @@ public class AuthService
         userRefreshToken.RevokedOn = DateTime.UtcNow; // Mark it as revoked
 
         // Generate a new JWT token and refresh token
-        var authResponse = await GenerateAuthResponseAsync(user);
+        var authResponse = await GenerateAuthResponseAsync(user, cancellationToken);
         return Result.Success(authResponse.Value);
     }
 
@@ -133,6 +135,15 @@ public class AuthService
             return Result.Failure<AuthResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
 
+        // add this user to the default role in AspNetUserRoles table
+
+        result = await _userManager.AddToRoleAsync(user,DefaultRoles.Member);
+        if (!result.Succeeded)
+        {
+            var error = result.Errors.FirstOrDefault();
+            return Result.Failure<AuthResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
+        }
+
 
 
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);    // Generate a token for email confirmation
@@ -142,7 +153,7 @@ public class AuthService
 
         // Send the confirmation email with the code in background job to avoid blocking the request with hangfire
 
-        await sendConfirmationEmail(user, code);
+        await sendConfirmationEmailAsync(user, code);
 
         return Result.Success();
     }
@@ -192,7 +203,7 @@ public class AuthService
 
         // TODO: Send the confirmation email with the code
 
-        await sendConfirmationEmail(user, code);
+        await sendConfirmationEmailAsync(user, code);
 
         _logger.LogInformation("Confirmation Code: {code}", code);
 
@@ -256,9 +267,27 @@ public class AuthService
 
 
 
-    private async Task<Result<AuthResponse>> GenerateAuthResponseAsync(ApplicationUser user)
+
+
+
+
+
+
+
+
+
+
+
+    private async Task<Result<AuthResponse>> GenerateAuthResponseAsync(ApplicationUser user, CancellationToken cancellationToken)
     {
-        var (token, expiresIn) = _jwtProvider.GenerateToken(user);
+        // Retrieve user roles
+        var roles = await _userManager.GetRolesAsync(user);
+
+        // Get permissions for user roles
+        var permissions = await GetPermissionsForUserRolesAsync(roles, cancellationToken);
+
+
+        var (token, expiresIn) = _jwtProvider.GenerateToken(user, roles, permissions);
 
         var refreshToken = GenerateRefreshToken();
         user.RefreshTokens.Add(refreshToken);
@@ -269,6 +298,30 @@ public class AuthService
 
         return Result.Success(authResponse);
     }
+    private async Task<List<string>> GetPermissionsForUserRolesAsync(IEnumerable<string> userRoles, CancellationToken cancellationToken)
+    {
+        //var permissions = await _context.Roles
+        //    .Join(_context.RoleClaims,
+
+        //        role => role.Id,
+        //        roleClaim => roleClaim.RoleId,
+        //        (role, roleClaim) => new { role, roleClaim }
+        //    ).Where(x => userRoles.Contains(x.role.Name))
+        //    .Select(x => x.roleClaim.ClaimValue!)
+        //    .Distinct()
+        //    .ToListAsync(cancellationToken);
+
+        var permessions = await (from role in _context.Roles
+                                 join roleClaim in _context.RoleClaims
+                                 on role.Id equals roleClaim.RoleId
+                                 where userRoles.Contains(role.Name)
+                                 select roleClaim.ClaimValue)
+                                 .Distinct()
+                                 .ToListAsync(cancellationToken);
+
+        return permessions;
+    }
+
 
     private RefreshToken GenerateRefreshToken()
     {
@@ -279,7 +332,7 @@ public class AuthService
         };
     }
 
-    private async Task sendConfirmationEmail(ApplicationUser user, string code)
+    private async Task sendConfirmationEmailAsync(ApplicationUser user, string code)
     {
         var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
         //var baseUrl = _configuration["AppSettings:BaseUrl"];
@@ -315,4 +368,5 @@ public class AuthService
 
         await Task.CompletedTask; 
     }
+
 }

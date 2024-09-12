@@ -42,3 +42,4 @@ global using Hangfire.Dashboard;
 global using Hangfire;
 global using SurveyBasket.Api.Helpers;
 global using SurveyBasket.Api.Contracts.Users;
+global using SurveyBasket.Api.Authentication.Filters;
