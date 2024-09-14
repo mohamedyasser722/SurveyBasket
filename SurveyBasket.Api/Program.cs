@@ -1,5 +1,4 @@
-using Hangfire;
-using Hangfire.Dashboard;
+
 using Serilog;
 using SurveyBasket.Api.Hangfire;
 
