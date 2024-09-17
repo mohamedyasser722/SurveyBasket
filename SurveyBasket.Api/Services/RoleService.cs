@@ -11,7 +11,7 @@ public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationD
         return await _roleManager.Roles
             .Where(role => !role.IsDefault && (includeDisabled == true || !role.IsDeleted))
             .ProjectToType<RoleResponse>()
-            .ToArrayAsync(cancellationToken);
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<Result<RoleDetailResponse>> GetAsync(string id)
@@ -33,7 +33,7 @@ public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationD
         return Result.Success(response);
     }
 
-    public async Task<Result<RoleDetailResponse>> AddAsync(RollRequest request)
+    public async Task<Result<RoleDetailResponse>> AddAsync(RollRequest request, CancellationToken cancellationToken = default)
     {
         bool roleIsExist = await _roleManager.FindByNameAsync(request.Name) is not null;
 
@@ -71,8 +71,8 @@ public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationD
 
         });
 
-        await _context.RoleClaims.AddRangeAsync(permissions);
-        await _context.SaveChangesAsync();
+        await _context.RoleClaims.AddRangeAsync(permissions, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         var response = new RoleDetailResponse(
             role.Id,

@@ -10,5 +10,9 @@ public static class UserErrors
     public static readonly Error EmailNotConfirmed = new("email_not_confirmed", "The provided email is not confirmed.", StatusCodes.Status401Unauthorized);
     public static readonly Error InvalidCode = new("invalid_code", "The provided code is invalid.", StatusCodes.Status400BadRequest);
     public static readonly Error DuplicatedConfirmation = new("email_already_confirmed", "Email already confirmed by the user", StatusCodes.Status400BadRequest);
+    public static readonly Error UserIsDisabled = new("user_is_disabled", "User is disabled, please contact your adminstrator.", StatusCodes.Status400BadRequest);
+    public static readonly Error LockedUser = new("locked_user", "User is locked out, please contact your adminstrator.", StatusCodes.Status400BadRequest);
+    public static readonly Error InvalidRoles = new("invalid_roles", "The provided roles are invalid.", StatusCodes.Status400BadRequest);
+    public static readonly Error UnableToUnlockUser = new("unable_to_unlock_user", "Unable to unlock user, please contact your adminstrator.", StatusCodes.Status400BadRequest);
 }
 

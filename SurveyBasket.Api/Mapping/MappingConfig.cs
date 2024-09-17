@@ -6,6 +6,8 @@ public static class MappingConfig
 {
     public static void RegisterMapsterConfiguration(this IServiceCollection services)
     {
+        // Set global CascadeMode to Stop
+
         // for learning purposes:
 
         //  TypeAdapterConfig<Student, StudentResponse>
@@ -22,6 +24,25 @@ public static class MappingConfig
         //TypeAdapterConfig<QuestionRequest, Question>
         //    .NewConfig()
         //    .Ignore(dest => dest.Answers);
+
+
+        TypeAdapterConfig<(ApplicationUser user, IList<string> roles), UserResponse>
+            .NewConfig()
+            .Map(dest => dest.Id, src => src.user.Id)
+            .Map(dest => dest.FirstName, src => src.user.FirstName)
+            .Map(dest => dest.LastName, src => src.user.LastName)
+            .Map(dest => dest.Email, src => src.user.Email)
+            .Map(dest => dest.IsDisabled, src => src.user.IsDisabled)
+            .Map(dest => dest.Roles, src => src.roles);
+
+        TypeAdapterConfig<CreateUserRequest , ApplicationUser>
+            .NewConfig()
+            .Map(dest => dest.UserName, src => src.Email)
+            .Map(dest => dest.EmailConfirmed, src => true);
+
+        TypeAdapterConfig<UpdateUserRequest, ApplicationUser>
+             .NewConfig()
+             .Map(dest => dest.UserName, src => src.Email);
 
         TypeAdapterConfig.GlobalSettings.Scan(Assembly.GetExecutingAssembly());
     }

@@ -101,6 +101,7 @@ public static class DependencyInjection
     {
         Services.AddValidatorsFromAssemblyContaining<PollRequest>();
         Services.AddFluentValidationAutoValidation();
+        
         return Services;
     }
 

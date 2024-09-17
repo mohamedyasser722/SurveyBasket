@@ -20,7 +20,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     // Get a specific role by id using route parameter
     [HttpGet("{id}")] // Change from "id" to "{id}"
     [HasPermission(Permissions.GetRoles)]
-    public async Task<IActionResult> GetAsync([FromRoute] string id)
+    public async Task<IActionResult> Get([FromRoute] string id)
     {
         var result = await _roleService.GetAsync(id);
         return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
@@ -29,10 +29,10 @@ public class RolesController(IRoleService roleService) : ControllerBase
     // Add a new role
     [HttpPost]
     [HasPermission(Permissions.AddRoles)]
-    public async Task<IActionResult> AddAsync([FromBody] RollRequest request)
+    public async Task<IActionResult> AddAsync([FromBody] RollRequest request, CancellationToken cancellationToken)
     {
-        var result = await _roleService.AddAsync(request);
-        return result.IsSuccess ? CreatedAtAction(nameof(GetAsync), new {result.Value.Id}, result.Value) : result.ToProblem();
+        var result = await _roleService.AddAsync(request, cancellationToken);
+        return result.IsSuccess ? CreatedAtAction(nameof(Get), new {result.Value.Id}, result.Value) : result.ToProblem();
     }
 
     [HttpPut("{id}")]

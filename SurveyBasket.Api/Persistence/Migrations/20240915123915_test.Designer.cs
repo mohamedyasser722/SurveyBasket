@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SurveyBasket.Api.Persistence;
 
@@ -11,9 +12,11 @@ using SurveyBasket.Api.Persistence;
 namespace SurveyBasket.Api.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240915123915_test")]
+    partial class test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,9 +342,6 @@ namespace SurveyBasket.Api.Persistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsDisabled")
-                        .HasColumnType("bit");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -401,12 +401,11 @@ namespace SurveyBasket.Api.Persistence.Migrations
                             Email = "admin@survey-basket.com",
                             EmailConfirmed = true,
                             FirstName = "Survey Basket",
-                            IsDisabled = false,
                             LastName = "Admin",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@SURVEY-BASKET.COM",
                             NormalizedUserName = "ADMIN@SURVEY-BASKET.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBOn6fJxrgXKXSmaKZZlBAb6lwU1BUWAQHDYneIah1MHb1NHnit/moRXgpobkNKEhQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP+IlSjS7wWHjRI01rrlTLI30SFsZu6hV54Ecs4nQkMVNVAY/J6xQHY03Q1WhfH/gg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "A54B66CD079F44D5A8818A9530D5FC78",
                             TwoFactorEnabled = false,

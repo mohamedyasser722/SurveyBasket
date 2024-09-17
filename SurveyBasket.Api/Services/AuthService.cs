@@ -2,6 +2,7 @@
 using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
+using SurveyBasket.Api.Abstraction;
 using SurveyBasket.Api.Helpers;
 using SurveyBasket.Api.Services.Services.Interfaces;
 
@@ -53,12 +54,19 @@ public class AuthService
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-        var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
+        if(user.IsDisabled)
+            return Result.Failure<AuthResponse>(UserErrors.UserIsDisabled);
+
+        var result = await _signInManager.PasswordSignInAsync(user, password, false, true);
 
         if (result.Succeeded)
             return await GenerateAuthResponseAsync(user, cancellationToken);
-
+        
         _logger.LogWarning("Failed login attempt for Email: {Email}", email);
+
+        if(result.IsLockedOut)
+            return Result.Failure<AuthResponse>(UserErrors.LockedUser);
+
         return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
 
     }
@@ -73,6 +81,12 @@ public class AuthService
         var user = await _userManager.FindByIdAsync(userId);
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.UserNotFound);
+
+        if(user.IsDisabled)
+            return Result.Failure<AuthResponse>(UserErrors.UserIsDisabled);
+
+        if (user.LockoutEnd > DateTime.UtcNow)
+            return Result.Failure<AuthResponse>(UserErrors.LockedUser);
 
         // Validate the refresh token
         RefreshToken userRefreshToken = user.RefreshTokens.FirstOrDefault(rt => rt.Token == refreshToken && rt.IsActive);
