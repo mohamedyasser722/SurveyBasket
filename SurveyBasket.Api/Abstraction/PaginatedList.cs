@@ -2,41 +2,27 @@
 
 public class PaginatedList<T>
 {
-    public int PageIndex { get; private set; }
+    public int PageNumber { get; private set; }
+    public int PageSize { get; private set; } 
     public int TotalPages { get; private set; }
-    public int PageSize { get; private set; }
     public int TotalCount { get; private set; }
+    public bool HasPreviousPage => (PageNumber > 1);
+    public bool HasNextPage => (PageNumber < TotalPages);
     public List<T> Items { get; private set; }
 
-    public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
+    private PaginatedList(List<T> items, int count, int pageNumber, int pageSize)
     {
-        PageIndex = pageIndex;
+        PageNumber = pageNumber;
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         PageSize = pageSize;
         TotalCount = count;
         Items = items;
     }
 
-    public bool HasPreviousPage
+    public static async Task<PaginatedList<T>> Create(IQueryable<T> source, int pageNumber, int pageSize, CancellationToken cancellationToken)
     {
-        get
-        {
-            return (PageIndex > 1);
-        }
-    }
-
-    public bool HasNextPage
-    {
-        get
-        {
-            return (PageIndex < TotalPages);
-        }
-    }
-
-    public static PaginatedList<T> Create(IQueryable<T> source, int pageIndex, int pageSize)
-    {
-        var count = source.Count();
-        var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-        return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        var count = await source.CountAsync(cancellationToken);
+        var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        return new PaginatedList<T>(items, count, pageNumber, pageSize);
     }
 }
