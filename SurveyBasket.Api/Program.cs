@@ -1,4 +1,6 @@
 
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using SurveyBasket.Api.Hangfire;
 
@@ -56,6 +58,12 @@ public class Program
 
         // Add custom exception handling (new in .NET 8 and above)
         app.UseExceptionHandler();
+
+        // Add health checks
+        app.MapHealthChecks("health", new HealthCheckOptions
+        {
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
 
         // Map controllers
         app.MapControllers();

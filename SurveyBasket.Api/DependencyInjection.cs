@@ -1,5 +1,7 @@
 ﻿
 
+using SurveyBasket.Api.Health;
+
 namespace SurveyBasket.Api;
 
 public static class DependencyInjection
@@ -53,6 +55,11 @@ public static class DependencyInjection
         Services.AddProblemDetails();
 
         Services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
+
+        Services.AddHealthChecks()
+            .AddSqlServer(name: "database", connectionString: Configuration.GetConnectionString("DefaultConnection")!)
+            .AddHangfire(options => {options.MinimumAvailableServers = 1;})
+            .AddCheck<MailProviderHealthCheck>(name: "mail service");
         #endregion
 
         return Services;
