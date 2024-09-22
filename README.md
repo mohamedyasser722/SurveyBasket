@@ -1,7 +1,3 @@
-Here’s an updated README draft that includes the database schema and relationships explanation:
-
----
-
 # SurveyBasket API
 
 Welcome to the **SurveyBasket API**! This repository contains the backend logic for a survey and poll management system, providing endpoints for user authentication, polls, questions, votes, and more.
