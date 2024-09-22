@@ -194,6 +194,7 @@ To run the project locally:
    ```
 
    It is recommended to update the database step by step based on each migration in the persistence/migrations folder, to avoid errors or strange behaviors.
+    Also go to appsettings.json and add your email from the Ethereal Email website, link: https://ethereal.email/create , go to this website to create the email and change it in the  appsettings.json with its password.
 
 ---
 
