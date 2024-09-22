@@ -1,4 +1,4 @@
-Here's a draft of a GitHub README file explaining the API controllers in your project:
+Here’s an updated README draft that includes the database schema and relationships explanation:
 
 ---
 
@@ -20,6 +20,7 @@ Welcome to the **SurveyBasket API**! This repository contains the backend logic 
   - [Users Controller](#users-controller)
   - [Votes Controller](#votes-controller)
 - [Permissions](#permissions)
+- [Database Schema](#database-schema)
 - [How to Run the Project](#how-to-run-the-project)
 
 ---
@@ -124,6 +125,64 @@ The `VotesController` allows users to submit votes for polls and fetch available
 
 Permissions are enforced at the controller and action level to restrict access based on the user's role and assigned permissions. These permissions are set in attributes such as `[HasPermission(Permissions.AddPolls)]`.
 
+## Database Schema
+
+The **SurveyBasket API** database schema is designed around core entities such as `Poll`, `Question`, `Vote`, and `ApplicationUser`. Below is a high-level overview of the tables and relationships.
+
+### Key Entities and Relationships:
+
+- **ApplicationUser**: Represents the system's users, extending ASP.NET Core Identity features. Each user has many `RefreshTokens`, and can have many `Votes`.
+  
+  - One-to-Many: `ApplicationUser` ↔ `RefreshToken`
+  - One-to-Many: `ApplicationUser` ↔ `Vote`
+
+- **Poll**: Contains survey information such as title, summary, start and end dates. A poll has many `Questions` and `Votes`.
+  
+  - One-to-Many: `Poll` ↔ `Question`
+  - One-to-Many: `Poll` ↔ `Vote`
+
+- **Question**: Contains the questions that users will answer. A question belongs to a `Poll` and has many `Answers` and `VoteAnswers`.
+  
+  - One-to-Many: `Question` ↔ `Answer`
+  - One-to-Many: `Question` ↔ `VoteAnswer`
+
+- **Answer**: Represents possible answers for a question. Each answer belongs to a `Question` and can have associated `VoteAnswers`.
+  
+  - One-to-Many: `Answer` ↔ `VoteAnswer`
+
+- **Vote**: Represents a user's submission of responses for a poll. Each vote has many `VoteAnswers` and is linked to a `Poll` and `ApplicationUser`.
+  
+  - One-to-Many: `Vote` ↔ `VoteAnswer`
+  - Many-to-One: `Vote` ↔ `ApplicationUser`
+
+- **VoteAnswer**: Links a `Vote`, `Question`, and `Answer` to store the user's response for each question in a poll.
+
+### Database Diagram
+
+The schema can be visualized as follows:
+
+```plaintext
+ApplicationUser
+    ↳ RefreshToken (1-N)
+    ↳ Vote (1-N)
+
+Poll
+    ↳ Question (1-N)
+    ↳ Vote (1-N)
+
+Question
+    ↳ Answer (1-N)
+    ↳ VoteAnswer (1-N)
+
+Answer
+    ↳ VoteAnswer (1-N)
+
+Vote
+    ↳ VoteAnswer (1-N)
+```
+
+Each arrow (↳) represents a one-to-many (1-N) relationship. For example, one `Poll` can have many `Questions`, and one `Question` can have many `Answers`.
+
 ## How to Run the Project
 
 To run the project locally:
@@ -132,10 +191,13 @@ To run the project locally:
    ```bash
    git clone https://github.com/your-repo/SurveyBasket.Api.git
    ```
-2. Update Databse:
+
+2. Update the Database:
    ```bash
-   (update-database command in package manager console) and it is recommended that u update database step by step based on each migration in the persistence/migrations folder, so you don't get any kind of errors or starnge behaviour.
+   Update-Database
    ```
 
+   It is recommended to update the database step by step based on each migration in the persistence/migrations folder, to avoid errors or strange behaviors.
 
 ---
+
