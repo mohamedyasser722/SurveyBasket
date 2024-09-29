@@ -195,7 +195,7 @@ To run the project locally:
 
    It is recommended to update the database incrementally, applying each migration found in the `persistence/migrations` folder step by step to avoid errors or unexpected behavior. Additionally, update the `appsettings.json` file with your email credentials from the [Ethereal Email website](https://ethereal.email/create). Visit the website to create an email account, and replace the email and password in the `appsettings.json` file with the newly generated credentials.
 
-also i have provided all my endpoints collection through postman 
+also i have provided all my endpoints collection through postman in the repo.
 
 ---
 
