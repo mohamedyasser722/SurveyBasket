@@ -1,10 +1,12 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.RateLimiting;
 using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Controllers
 {
-    [Route("[controller]")]
+    [Route("v{v:apiVersion}/[controller]")]
     [ApiController]
+    [EnableRateLimiting("ipLimit")]
     public class AuthController(IAuthService authService, ILogger<AuthController> logger) : ControllerBase
     {
         private readonly IAuthService _authService = authService;
@@ -46,6 +48,7 @@ namespace SurveyBasket.Api.Controllers
         }
 
         [HttpPost("register")]
+        [DisableRateLimiting]
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterRequest request, CancellationToken cancellationToken = default)
         {
             var response = await _authService.RegisterAsync(request, cancellationToken);
@@ -72,12 +75,12 @@ namespace SurveyBasket.Api.Controllers
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest request, CancellationToken cancellationToken = default)
         {
             var result = await _authService.ResendConfirmationEmailAsync(request);
-           
-            return result.IsSuccess? Ok() : result.ToProblem();
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
         }
 
         [HttpPost("forget-password")]
-        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequest request) 
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequest request)
         {
             var result = await _authService.SendResetPasswordCodeAsync(request);
 
@@ -91,8 +94,14 @@ namespace SurveyBasket.Api.Controllers
             return result.IsSuccess ? Ok() : result.ToProblem();
         }
 
-        
 
-
+        // test
+        [HttpGet("test")]
+        public async Task<IActionResult> Test()
+        {
+            // Delay for 6 seconds asynchronously
+            await Task.Delay(6000);
+            return Ok("Test");
+        }
     }
 }

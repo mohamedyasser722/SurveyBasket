@@ -15,7 +15,7 @@ public class PollService(ApplicationDbContext context, INotificationService noti
        var polls = await _polls.AsNoTracking().ToListAsync(cancellationToken);
        return polls.Adapt<IEnumerable<PollResponse>>();
     }
-    public async Task<IEnumerable<PollResponse>> GetCurrentAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PollResponse>> GetCurrentAsyncV1(CancellationToken cancellationToken = default)
     {
         // Convert StartsAt and EndsAt to UTC before comparing
         // current polls are the polls that are published and the current time is between StartsAt and EndsAt
@@ -27,6 +27,18 @@ public class PollService(ApplicationDbContext context, INotificationService noti
             .ToListAsync(cancellationToken);
 
         return currentPolls.Adapt<IEnumerable<PollResponse>>();
+    }
+    public async Task<IEnumerable<PollResponseV2>> GetCurrentAsyncV2(CancellationToken cancellationToken = default)
+    {
+        // Convert StartsAt and EndsAt to UTC before comparing
+        // current polls are the polls that are published and the current time is between StartsAt and EndsAt
+        var currentPolls = await _polls
+            .Where(p => p.StartsAt <= DateTime.UtcNow &&
+                     p.EndsAt >= DateTime.UtcNow)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+
+        return currentPolls.Adapt<IEnumerable<PollResponseV2>>();
     }
 
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Controllers;
-[Route("api/polls/{pollId}/[controller]")]
+[Route("api/v{v:apiVersion}/polls/{pollId}/[controller]")]
 [ApiController]
 [HasPermission(Permissions.Results)]
 public class ResultsController(IResultService resultService) : ControllerBase

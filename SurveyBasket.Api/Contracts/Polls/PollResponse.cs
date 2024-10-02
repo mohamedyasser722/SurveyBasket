@@ -8,3 +8,10 @@ public record PollResponse(
     DateTime StartsAt,
     DateTime EndsAt
 );
+public record PollResponseV2(
+    int Id,
+    string Title,
+    string Summary,
+    DateTime StartsAt,
+    DateTime EndsAt
+);

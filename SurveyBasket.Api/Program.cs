@@ -55,9 +55,18 @@ public class Program
 
         // Use CORS if needed
         app.UseCors();
+        // Add Rate Limitters
+        app.UseRateLimiter();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        // Map controllers
+        app.MapControllers();
 
         // Add custom exception handling (new in .NET 8 and above)
         app.UseExceptionHandler();
+
 
         // Add health checks
         app.MapHealthChecks("health", new HealthCheckOptions
@@ -65,8 +74,6 @@ public class Program
             ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
         });
 
-        // Map controllers
-        app.MapControllers();
 
         // Start the application
         app.Run();

@@ -1,6 +1,9 @@
 ﻿
 
+using Asp.Versioning;
+using Microsoft.AspNetCore.RateLimiting;
 using SurveyBasket.Api.Health;
+using System.Threading.RateLimiting;
 
 namespace SurveyBasket.Api;
 
@@ -60,6 +63,23 @@ public static class DependencyInjection
             .AddSqlServer(name: "database", connectionString: Configuration.GetConnectionString("DefaultConnection")!)
             .AddHangfire(options => {options.MinimumAvailableServers = 1;})
             .AddCheck<MailProviderHealthCheck>(name: "mail service");
+
+        Services.AddRateLimiter();
+
+        Services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(1);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
+        }).AddApiExplorer(options =>
+        {
+            options.GroupNameFormat = "'v'V";
+            options.SubstituteApiVersionInUrl = true;
+        });
+
+
         #endregion
 
         return Services;
@@ -182,6 +202,83 @@ public static class DependencyInjection
 
         // Add the processing server as IHostedService
         Services.AddHangfireServer();
+
+        return Services;
+    }
+
+    // Add Rate Limitter
+    public static IServiceCollection AddRateLimiter(this IServiceCollection Services)
+    {
+        Services.AddRateLimiter(rateLimiterOptions =>
+        {
+            rateLimiterOptions.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+            rateLimiterOptions.AddPolicy(RateLimiterPolicyNames.ipLimit, httpContext =>
+
+                RateLimitPartition.GetFixedWindowLimiter(
+
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString(),
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 2,
+                            Window = TimeSpan.FromSeconds(20)
+                        }
+
+                )
+
+
+            );
+
+            rateLimiterOptions.AddPolicy(RateLimiterPolicyNames.userLimit, httpContext =>
+
+                RateLimitPartition.GetFixedWindowLimiter(
+
+                        partitionKey: httpContext.User.GetUserId(),
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 2,
+                            Window = TimeSpan.FromSeconds(20)
+                        }
+
+                )
+
+
+            );
+
+            rateLimiterOptions.AddConcurrencyLimiter(RateLimiterPolicyNames.concurrency, configureOptions =>
+            {
+                configureOptions.PermitLimit = 1000;
+                configureOptions.QueueLimit = 100;
+                configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            });
+
+            //rateLimiterOptions.AddTokenBucketLimiter(RateLimiterPolicyNames.tokenBucket, configureOptions =>
+            // {
+            //     configureOptions.TokenLimit = 2;
+            //     configureOptions.QueueLimit = 1;
+            //     configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            //     configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(30);
+            //     configureOptions.TokensPerPeriod = 2;
+            //     configureOptions.AutoReplenishment = true;
+            // });
+
+            //rateLimiterOptions.AddFixedWindowLimiter(RateLimiterPolicyNames.fixedWindow, configureOptions =>
+            //{
+            //    configureOptions.PermitLimit = 2;
+            //    configureOptions.QueueLimit = 1;
+            //    configureOptions.Window = TimeSpan.FromSeconds(20);
+            //    configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            //});
+
+            //rateLimiterOptions.AddSlidingWindowLimiter(RateLimiterPolicyNames.slidingWindow, configureOptions =>
+            //{
+            //    configureOptions.PermitLimit = 2;
+            //    configureOptions.QueueLimit = 1;
+            //    configureOptions.SegmentsPerWindow = 2;
+            //    configureOptions.Window = TimeSpan.FromSeconds(20);
+            //    configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            //});
+        });
 
         return Services;
     }

@@ -4,7 +4,7 @@ using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Controllers;
 
-[Route("api/polls/{pollId}/[controller]")]
+[Route("api/v{v:apiVersion}/polls/{pollId}/[controller]")]
 [ApiController]
 public class QuestionsController(IQuestionService questionService) : ControllerBase
 {

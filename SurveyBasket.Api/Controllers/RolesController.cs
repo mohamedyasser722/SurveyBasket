@@ -3,7 +3,7 @@
 namespace SurveyBasket.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{v:apiVersion}/[controller]")]
 public class RolesController(IRoleService roleService) : ControllerBase
 {
     private readonly IRoleService _roleService = roleService;
