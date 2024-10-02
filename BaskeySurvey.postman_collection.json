@@ -1,0 +1,1168 @@
+{
+	"info": {
+		"_postman_id": "ff416e44-3f94-427e-8b80-d75add3273e0",
+		"name": "BaskeySurvey",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34085490"
+	},
+	"item": [
+		{
+			"name": "Polls",
+			"item": [
+				{
+					"name": "GetAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/19",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"19"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Best Movies In Egypt\",\r\n  \"summary\": \"string\",\r\n  \"startsAt\": \"2024-09-17T17:40:23.013Z\",\r\n  \"endsAt\": \"2025-09-17T17:37:23.013Z\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"I Love Leylaaaa\",\r\n    \"summary\": \"string\",\r\n    \"startsAt\": \"2024-09-05T13:50:03.852Z\",\r\n    \"endsAt\": \"2024-12-25T00:59:56.751\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls/8",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/4",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle-Publish-Status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/1/toggle-publish-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"1",
+								"toggle-publish-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Polls",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v2/polls/current",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v2",
+								"polls",
+								"current"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"mohamedyasser722@gmail.com\",\r\n  \"password\": \"Pa$$w0rd\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get refresh token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmY2RlNTRlOS0yNGYwLTRlYzctOTEwNy1mZDYxZGZhMmExMTIiLCJlbWFpbCI6Im1vaGFtZWR5YXNzZXI3MjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1vaGFtZWQiLCJmYW1pbHlfbmFtZSI6IkhhbWR5IiwianRpIjoiMTM2NzY1NGYtNWI3Ni00YTYyLThmNGUtODJmOGI3NTkwOTQxIiwiZXhwIjoxNzI0NzE5MTAyLCJpc3MiOiJTdXJ2ZXlCYXNrZXRBcHAiLCJhdWQiOiJTdXJ2ZXlCYXNrZXRBcHAgVXNlcnMifQ.mM3076usHiiL3wQIGRYcFLCFpcY392A_MhH4nfF2k_A\",\r\n    \"refreshToken\": \"ZmgMj2AL2YT5gfVnXP4xnKnN6Ggjp9oZX6DP8dk3viGZ3daFCrTM5ERxVwmymgDlb/8MdcKs/WIMplhlWNLjEA==\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/refresh",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "revoke refresh token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmY2RlNTRlOS0yNGYwLTRlYzctOTEwNy1mZDYxZGZhMmExMTIiLCJlbWFpbCI6Im1vaGFtZWR5YXNzZXI3MjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1vaGFtZWQiLCJmYW1pbHlfbmFtZSI6IkhhbWR5IiwianRpIjoiOGJlZTZkN2YtOWNkNS00ZGI1LWE4YzMtZTZhNDc1ZGVmNzIwIiwiZXhwIjoxNzI0NjAzMDI1LCJpc3MiOiJTdXJ2ZXlCYXNrZXRBcHAiLCJhdWQiOiJTdXJ2ZXlCYXNrZXRBcHAgVXNlcnMifQ.F4CCSRC0EvluMfLlfkqRHzcC_YOvMYEV1XDXaq6T7fI\",\r\n    \"refreshToken\": \"DR6Rf0KP7wg3kf8AqGzjLiNL7rnDHwMkUzzD+IxyXfY/mUtiPtmn530OSVvZq7aA3r9LgHYOLAAvSbuBPE3A2w==\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/revoke-refresh-token",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"revoke-refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"test2@gmail.com\",\r\n  \"password\": \"Pa$$w0rd\",\r\n  \"firstName\": \"test2\",\r\n  \"lastName\": \"test2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\" : \"3e27e105-333d-486f-89cf-80599a857496\",\r\n    \"code\":\"Q2ZESjhOU1Zlc0NNSnBsTWdUcUkzRG80bmI1R1Z2aUtKMlhzR05ObHMyOHk4bEFNWkJhNWVCTkE2SEhEV1lzQTF0SGF4T0VEN2dPaUdvMlBHL1dBcGRIc1M1TVFwTGdxYVFJZFRhU2pKR3ZmZCtBVDNMbzJjcjRWU0pySHluWngzZ25EQ2FST2N5WTVncVNFVjdTOGk3YUp5TmI5dzZ0TFcxVDJ5S3liQ3VWNEJGMkg5RW1ubDErTEtzSjYxTnZmZEZmaG9CaldZTnBQaHB0L05GRzFKNkF0ZUJFZktTMlp3bm1hSGtXNVRvWGlVRUJWVmNWWmJlQXJFa0Z5eVFqWXJrdHRmZz09\" \r\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/confirm-email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"confirm-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Resend Confirmation Email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"mohamedyasser722@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/resend-confirmation-email",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"resend-confirmation-email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forget Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"mohamedyasser722@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/forget-password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"forget-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"fcde54e9-24f0-4ec7-9107-fd61dfa2a112\",\r\n    \"code\":\"Q2ZESjhOU1Zlc0NNSnBsTWdUcUkzRG80bmI0SzR4clI2ZlhsWkNjdFVWcWgrTzBYZDdSMXR6aEMyanZkejVPTk5WbUd3YUtiVUxtcGIxSklGeWtsby81Z0xIZkV5QTA5ZVhGNHczMmRNOGRQVkhnVkVIL213T1ozVDlJeE51Q2ZBZUE3aXBsN0grd2d6S3ExV1dxdVRUaktIYzFkQnQrYkE0K2FSbTlhcklGdUUzQkExM2dqSGsyTW5VNExDTlUyK0RnbVQrcEVnTjlsY2VKVUF4eUFUMG1XRlNnOHphZEJOZ3RRN0g3RitEdlZYQWJT\",\r\n    \"newPassword\":\"Mohamed@2003\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/auth/reset-password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/auth/test",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"auth",
+								"test"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "Add New Question",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"content\": \"What was the date released of the wiladrizk 1 movie ?\",\r\n  \"answers\": [\r\n    \"a. 2015\",\r\n    \"b. 2018\",\r\n    \"c. 2020\",\r\n    \"d. 2022\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls/1/Questions",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"1",
+								"Questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Question by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/8/Questions/8",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"8",
+								"Questions",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Questions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls/1/Questions?pageNumber=1&pageSize=5&searchValue=&SortColumn=content&SortDirection=asc",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"1",
+								"Questions"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								},
+								{
+									"key": "searchValue",
+									"value": ""
+								},
+								{
+									"key": "SortColumn",
+									"value": "content"
+								},
+								{
+									"key": "SortDirection",
+									"value": "asc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/8/Questions/1/toggleStatus",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"8",
+								"Questions",
+								"1",
+								"toggleStatus"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Question",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"content\": \"Question 1 What the height that considered tall?\",\r\n  \"answers\": [\r\n    \"5.9 ft\",\r\n    \"5.11 ft\",\r\n    \"6 ft\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls/8/Questions/8",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"8",
+								"Questions",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Votes",
+			"item": [
+				{
+					"name": "Start",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/polls/1/vote",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"polls",
+								"1",
+								"vote"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Vote",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"answers\": [\r\n    {\r\n      \"questionId\": 14,\r\n      \"answerId\": 38\r\n    },\r\n    {\r\n      \"questionId\": 15,\r\n      \"answerId\": 42\r\n    },{\r\n      \"questionId\": 16,\r\n      \"answerId\": 47\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls/1/vote",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"1",
+								"vote"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Results",
+			"item": [
+				{
+					"name": "Row Data",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/polls/16/Results/row-data",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"16",
+								"Results",
+								"row-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Votes Per Day",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/16/Results/votes-per-day",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"16",
+								"Results",
+								"votes-per-day"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Votes Per Question",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/polls/16/Results/votes-per-question",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"polls",
+								"16",
+								"Results",
+								"votes-per-question"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/v1/me",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Mohamed\",\r\n  \"lastName\": \"Hamdy\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/me/info",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"me",
+								"info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"currentPassword\":\"Pa$$w0rd\",\r\n    \"newPassword\":\"Mohamed@yasser2003\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/v1/me/change-password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"v1",
+								"me",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/roles?includeDisabled=true",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"roles"
+							],
+							"query": [
+								{
+									"key": "includeDisabled",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/roles/5299fa14-7923-46cd-88d3-8881f9acaab7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"roles",
+								"5299fa14-7923-46cd-88d3-8881f9acaab7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Active",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/roles",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Role",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"RoleManager\",\r\n  \"permissions\": [\r\n    \"roles:read\",\r\n    \"roles:add\",\r\n    \"roles:update\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/roles",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Role",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"PollManager\",\r\n  \"permissions\": [\r\n        \"polls:read\",\r\n        \"polls:add\",\r\n        \"polls:update\",\r\n        \"polls:delete\"\r\n  ]\r\n  \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/roles/156002ff-11b3-4d64-b757-88389e2c3fb7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"roles",
+								"156002ff-11b3-4d64-b757-88389e2c3fb7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "    ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/Roles/156002ff-11b3-4d64-b757-88389e2c3fb7/toggle-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Roles",
+								"156002ff-11b3-4d64-b757-88389e2c3fb7",
+								"toggle-status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/Users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/Users/0482ba83-270b-4b53-822e-18da7a229855",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Users",
+								"0482ba83-270b-4b53-822e-18da7a229855"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Yasser\",\r\n  \"lastName\": \"Nabil\",\r\n  \"email\": \"yasser.nabil1965@gmail.com\",\r\n  \"password\": \"Pa$$w0rd\",\r\n  \"roles\": [\r\n    \"RoleManager\"\r\n\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/Users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"test\",\r\n  \"lastName\": \"test\",\r\n  \"email\": \"test1@gmail.com\",\r\n  \"roles\": [\r\n\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/Users/5299fa14-7923-46cd-88d3-8881f9acaab7",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"Users",
+								"5299fa14-7923-46cd-88d3-8881f9acaab7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/0482ba83-270b-4b53-822e-18da7a229855/toggle-status",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"0482ba83-270b-4b53-822e-18da7a229855",
+								"toggle-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Unlock User",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/79CF1F77-B459-4FB4-9244-DF21652FB7C3/unlock",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"79CF1F77-B459-4FB4-9244-DF21652FB7C3",
+								"unlock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Health Checks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/health",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3YTFiMzI1ZC00M2RkLTQ3YjAtYTBmMy1kNjkzOGNlMGMwOGMiLCJlbWFpbCI6Im1vaGFtZWR5YXNzZXI3MjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1vaGFtZWQiLCJmYW1pbHlfbmFtZSI6Illhc3NlciIsImp0aSI6ImQ1NjhmMWYzLTc3MDQtNDNlOS04ZWVjLTUyMDMxODNjNjYzMyIsInJvbGVzIjpbIlBvbGxNYW5hZ2VyIiwiTWVtYmVyIl0sInBlcm1pc3Npb25zIjpbInBvbGxzOmFkZCIsInBvbGxzOmRlbGV0ZSIsInBvbGxzOnJlYWQiLCJwb2xsczp1cGRhdGUiXSwiZXhwIjoxNzI3ODgxNTA0LCJpc3MiOiJTdXJ2ZXlCYXNrZXRBcHAiLCJhdWQiOiJTdXJ2ZXlCYXNrZXRBcHAgVXNlcnMifQ.cwdfyTIQejdgpwCNWvTzqNucl6z5V8UsVITCjWvbCdc",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "https://localhost:7055"
+		}
+	]
+}
