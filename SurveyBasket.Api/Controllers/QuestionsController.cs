@@ -52,7 +52,7 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
         return NoContent();
     }
 
-    [HttpPut("{id}/toggleStatus")]
+    [HttpPut("{id}/toggle-status")]
     [HasPermission(Permissions.UpdateQuestions)]
     public async Task<IActionResult> ToggleStatusAsync([FromRoute] int pollId, [FromRoute] int id, CancellationToken cancellationToken)
     {

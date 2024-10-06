@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace SurveyBasket.Api.EntitiesConfigurations;
+namespace SurveyBasket.Api.Persistence.EntitiesConfigurations;
 
 public class RoleClaimConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<string>>
 {
@@ -19,7 +19,7 @@ public class RoleClaimConfiguration : IEntityTypeConfiguration<IdentityRoleClaim
                 Id = i + 1,
                 ClaimType = Permissions.Type,
                 ClaimValue = permessions[i],
-                RoleId = DefaultRoles.AdminRoleId
+                RoleId = DefaultRoles.Admin.Id
             });
         }
 

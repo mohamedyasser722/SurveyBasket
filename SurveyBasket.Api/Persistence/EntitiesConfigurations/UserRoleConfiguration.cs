@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Identity;
 
-namespace SurveyBasket.Api.EntitiesConfigurations;
+namespace SurveyBasket.Api.Persistence.EntitiesConfigurations;
 
 public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<string>>
 {
@@ -13,7 +13,7 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<s
         builder.HasData(new IdentityUserRole<string>
         {
             UserId = DefaultUsers.AdminId,
-            RoleId = DefaultRoles.AdminRoleId
+            RoleId = DefaultRoles.Admin.Id
         });
 
     }

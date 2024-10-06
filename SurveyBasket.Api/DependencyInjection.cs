@@ -57,7 +57,11 @@ public static class DependencyInjection
         Services.AddExceptionHandler<GlobalExceptionHandler>();
         Services.AddProblemDetails();
 
-        Services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
+        //Services.Configure<MailSettings>(Configuration.GetSection(nameof(MailSettings)));
+        Services.AddOptions<MailSettings>()
+            .BindConfiguration(nameof(MailSettings))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         Services.AddHealthChecks()
             .AddSqlServer(name: "database", connectionString: Configuration.GetConnectionString("DefaultConnection")!)

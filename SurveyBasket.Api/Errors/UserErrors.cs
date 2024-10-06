@@ -1,6 +1,6 @@
 ﻿namespace SurveyBasket.Api.Errors;
 
-public static class UserErrors
+public record UserErrors
 {
     public static readonly Error InvalidCredentials = new("invalid_credentials", "Invalid email or password",StatusCodes.Status400BadRequest);
     public static readonly Error InvalidToken = new("invalid_token", "The provided token is invalid or expired.", StatusCodes.Status400BadRequest);

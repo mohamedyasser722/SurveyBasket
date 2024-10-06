@@ -1,4 +1,4 @@
-﻿namespace SurveyBasket.Api.EntitiesConfigurations;
+﻿namespace SurveyBasket.Api.Persistence.EntitiesConfigurations;
 
 public class VoteAnswerConfiguration : IEntityTypeConfiguration<VoteAnswer>
 {

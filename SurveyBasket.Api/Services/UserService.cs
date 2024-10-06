@@ -51,7 +51,7 @@ public class UserService(UserManager<ApplicationUser> userManager,
                             on user.Id equals userRole.UserId
                             join role in _context.Roles
                             on userRole.RoleId equals role.Id
-                            where role.Name != DefaultRoles.Member // Filtering out Member role
+                            where role.Name != DefaultRoles.Member.Name // Filtering out Member role
                             group role.Name by new
                             {
                                 user.Id,

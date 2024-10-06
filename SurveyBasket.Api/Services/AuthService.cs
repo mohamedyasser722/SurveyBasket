@@ -151,7 +151,7 @@ public class AuthService
 
         // add this user to the default role in AspNetUserRoles table
 
-        result = await _userManager.AddToRoleAsync(user,DefaultRoles.Member);
+        result = await _userManager.AddToRoleAsync(user,DefaultRoles.Member.Name);
         if (!result.Succeeded)
         {
             var error = result.Errors.FirstOrDefault();
@@ -215,7 +215,7 @@ public class AuthService
         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);    // Generate a token for email confirmation
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));           // Encode the token to be URL-safe
 
-        // TODO: Send the confirmation email with the code
+        // Send the confirmation email with the code
 
         await sendConfirmationEmailAsync(user, code);
 
@@ -232,7 +232,7 @@ public class AuthService
         if (user is null)
             return Result.Success(); // We don't want to leak information about the user's existence
         if(!user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailNotConfirmed);
+            return Result.Failure(UserErrors.EmailNotConfirmed with { statusCode = StatusCodes.Status400BadRequest});
 
         var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 

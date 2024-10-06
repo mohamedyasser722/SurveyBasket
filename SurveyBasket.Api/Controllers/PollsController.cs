@@ -23,7 +23,7 @@ namespace SurveyBasket.Api.Controllers
         }
         [MapToApiVersion(1)]
         [HttpGet("current")]
-        [Authorize(Roles = DefaultRoles.Member)]
+        [Authorize(Roles = DefaultRoles.Member.Name)]
         [EnableRateLimiting("userLimit")]
         public async Task<IActionResult> GetCurrentV1(CancellationToken cancellationToken = default)
         {
@@ -32,11 +32,11 @@ namespace SurveyBasket.Api.Controllers
         }
         [MapToApiVersion(2)]
         [HttpGet("current")]
-        [Authorize(Roles = DefaultRoles.Member)]
+        [Authorize(Roles = DefaultRoles.Member.Name)]
         [EnableRateLimiting("userLimit")]
         public async Task<IActionResult> GetCurrentV2(CancellationToken cancellationToken = default)
         {
-            var pollsResponse = await _pollService.GetCurrentAsyncV2(cancellationToken);
+            var pollsResponse = await _pollService.GetCurrentAsyncV1(cancellationToken);
             return Ok(pollsResponse);
         }
 

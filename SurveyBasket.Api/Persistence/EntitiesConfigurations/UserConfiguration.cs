@@ -1,5 +1,4 @@
-﻿
-namespace SurveyBasket.Api.EntitiesConfigurations;
+﻿namespace SurveyBasket.Api.Persistence.EntitiesConfigurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
@@ -12,12 +11,12 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .WithOwner()
             .HasForeignKey("UserId");
 
-        builder.Property(p => p.FirstName).HasMaxLength(100);   
+        builder.Property(p => p.FirstName).HasMaxLength(100);
         builder.Property(p => p.LastName).HasMaxLength(100);
 
 
-        // Default Data
-        var hasher = new PasswordHasher<ApplicationUser>();
+        //// Default Data
+        //var hasher = new PasswordHasher<ApplicationUser>();
 
         builder.HasData(new ApplicationUser
         {
@@ -31,7 +30,8 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             SecurityStamp = DefaultUsers.AdminSecurityStamp,
             ConcurrencyStamp = DefaultUsers.AdminConcurrencyStamp,
             EmailConfirmed = true,
-            PasswordHash = hasher.HashPassword(null, DefaultUsers.AdminPassword)
+            //PasswordHash = hasher.HashPassword(null, DefaultUsers.AdminPassword)
+            PasswordHash = DefaultUsers.AdminPassword
         });
 
     }

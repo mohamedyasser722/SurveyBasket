@@ -7,7 +7,7 @@ using SurveyBasket.Api.Services.Services.Interfaces;
 namespace SurveyBasket.Api.Controllers;
 [Route("api/v{v:apiVersion}/polls/{pollId}/vote")]
 [ApiController]
-[Authorize(Roles = DefaultRoles.Member)]
+[Authorize(Roles = DefaultRoles.Member.Name)]
 [EnableRateLimiting("concurrency")]
 public class VotesController(IQuestionService questionService, IVoteService voteService) : ControllerBase
 {
