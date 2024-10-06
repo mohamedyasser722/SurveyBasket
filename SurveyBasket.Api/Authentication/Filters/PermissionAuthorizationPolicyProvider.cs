@@ -9,7 +9,7 @@ public class PermissionAuthorizationPolicyProvider(IOptions<AuthorizationOptions
     public override async Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
     {
         var policy = await base.GetPolicyAsync(policyName);
-        if(policy is not null)
+        if (policy is not null)
             return policy;
 
         var policyBuilder = new AuthorizationPolicyBuilder().

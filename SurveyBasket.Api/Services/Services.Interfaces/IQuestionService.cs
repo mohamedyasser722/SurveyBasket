@@ -1,8 +1,4 @@
-﻿using SurveyBasket.Api.Contracts.Common;
-using SurveyBasket.Api.Contracts.Questions;
-using SurveyBasket.Api.Entities;
-
-namespace SurveyBasket.Api.Services.Services.Interfaces;
+﻿namespace SurveyBasket.Api.Services.Services.Interfaces;
 
 public interface IQuestionService
 {

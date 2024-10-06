@@ -1,15 +1,11 @@
-﻿
-
-using Asp.Versioning;
-using Microsoft.AspNetCore.RateLimiting;
-using SurveyBasket.Api.Health;
+﻿using SurveyBasket.Api.Health;
 using System.Threading.RateLimiting;
 
 namespace SurveyBasket.Api;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDependencies(this IServiceCollection Services,IConfiguration Configuration)
+    public static IServiceCollection AddDependencies(this IServiceCollection Services, IConfiguration Configuration)
     {
         // Add services to the container.
 
@@ -42,7 +38,7 @@ public static class DependencyInjection
         Services.AddScoped<IQuestionService, QuestionService>();
         Services.AddScoped<IVoteService, VoteService>();
         Services.AddScoped<IResultService, ResultService>();
-        Services.AddScoped<ICacheService,CacheService>();
+        Services.AddScoped<ICacheService, CacheService>();
         Services.AddScoped<IEmailSender, EmailService>();
         Services.AddScoped<INotificationService, NotificationService>();
         Services.AddScoped<IUserService, UserService>();
@@ -65,7 +61,7 @@ public static class DependencyInjection
 
         Services.AddHealthChecks()
             .AddSqlServer(name: "database", connectionString: Configuration.GetConnectionString("DefaultConnection")!)
-            .AddHangfire(options => {options.MinimumAvailableServers = 1;})
+            .AddHangfire(options => { options.MinimumAvailableServers = 1; })
             .AddCheck<MailProviderHealthCheck>(name: "mail service");
 
         Services.AddRateLimiter();
@@ -132,7 +128,7 @@ public static class DependencyInjection
     {
         Services.AddValidatorsFromAssemblyContaining<PollRequest>();
         Services.AddFluentValidationAutoValidation();
-        
+
         return Services;
     }
 
@@ -144,7 +140,7 @@ public static class DependencyInjection
 
         return Services;
     }
-    public static IServiceCollection AddAuthConfig(this IServiceCollection Services,IConfiguration configuration)
+    public static IServiceCollection AddAuthConfig(this IServiceCollection Services, IConfiguration configuration)
     {
 
         Services.AddIdentity<ApplicationUser, ApplicationRole>()
@@ -163,7 +159,7 @@ public static class DependencyInjection
             .ValidateOnStart();
 
         var Jwtsettings = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>();
-        
+
 
         Services.AddAuthentication(options =>
         {

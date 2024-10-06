@@ -11,11 +11,11 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
 
         var user = context.User.Identity;
 
-        if(user is null || !user.IsAuthenticated)
+        if (user is null || !user.IsAuthenticated)
             return;
 
         var hasPermession = context.User.Claims.Any(x => x.Value == requirement.Permession && x.Type == Permissions.Type);
-        if(!hasPermession)
+        if (!hasPermession)
             return;
 
         context.Succeed(requirement);

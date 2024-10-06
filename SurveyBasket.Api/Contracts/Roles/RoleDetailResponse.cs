@@ -6,5 +6,5 @@ public record RoleDetailResponse(
     string Name,
     bool IsDeleted,
     IEnumerable<string> Permissions
-     
+
 );

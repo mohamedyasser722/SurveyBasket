@@ -10,7 +10,7 @@ public class JwtOptions
     [Required]
     public string Audience { get; init; } = string.Empty;
     [Required]
-    [Range(1, int.MaxValue,ErrorMessage = $"Invalid ExpiryInMinutes it should be 1 or greater")]
+    [Range(1, int.MaxValue, ErrorMessage = $"Invalid ExpiryInMinutes it should be 1 or greater")]
     public int ExpiryInMinutes { get; init; }
     [Required]
     [Range(1, int.MaxValue, ErrorMessage = $"Invalid RefreshTokenExpiryDays it should be 1 or greater")]

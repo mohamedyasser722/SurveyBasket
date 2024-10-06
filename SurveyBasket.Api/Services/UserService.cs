@@ -43,30 +43,30 @@ public class UserService(UserManager<ApplicationUser> userManager,
 
         #endregion
 
-        List<UserResponse> usersResponse02 = 
+        List<UserResponse> usersResponse02 =
                             await (from user in _context.Users
-                            join userRole in _context.UserRoles
-                            on user.Id equals userRole.UserId
-                            join role in _context.Roles
-                            on userRole.RoleId equals role.Id
-                            where role.Name != DefaultRoles.Member.Name // Filtering out Member role
-                            group role.Name by new
-                            {
-                                user.Id,
-                                user.FirstName,
-                                user.LastName,
-                                user.Email,
-                                user.IsDisabled
-                            } into userGroup
-                            select new UserResponse(
-                                userGroup.Key.Id,
-                                userGroup.Key.FirstName,
-                                userGroup.Key.LastName,
-                                userGroup.Key.Email,
-                                userGroup.Key.IsDisabled,
-                                userGroup.Select(roleName => roleName).Distinct().ToList()
-                            )
-                            
+                                   join userRole in _context.UserRoles
+                                   on user.Id equals userRole.UserId
+                                   join role in _context.Roles
+                                   on userRole.RoleId equals role.Id
+                                   where role.Name != DefaultRoles.Member.Name // Filtering out Member role
+                                   group role.Name by new
+                                   {
+                                       user.Id,
+                                       user.FirstName,
+                                       user.LastName,
+                                       user.Email,
+                                       user.IsDisabled
+                                   } into userGroup
+                                   select new UserResponse(
+                                       userGroup.Key.Id,
+                                       userGroup.Key.FirstName,
+                                       userGroup.Key.LastName,
+                                       userGroup.Key.Email,
+                                       userGroup.Key.IsDisabled,
+                                       userGroup.Select(roleName => roleName).Distinct().ToList()
+                                   )
+
                             ).ToListAsync(cancellationToken);
 
         return usersResponse02;
@@ -113,7 +113,7 @@ public class UserService(UserManager<ApplicationUser> userManager,
 
         #region userResponse02
 
-        if(await _userManager.FindByIdAsync(userId) is not { } User)
+        if (await _userManager.FindByIdAsync(userId) is not { } User)
             return Result.Failure<UserResponse>(UserErrors.UserNotFound);
 
         var userRoles = await _userManager.GetRolesAsync(User);
@@ -152,7 +152,7 @@ public class UserService(UserManager<ApplicationUser> userManager,
 
         var result = await _userManager.CreateAsync(user, request.Password);
 
-        if(!result.Succeeded)
+        if (!result.Succeeded)
         {
             var error = result.Errors.First();
             return Result.Failure<UserResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
@@ -257,12 +257,12 @@ public class UserService(UserManager<ApplicationUser> userManager,
         await _userManager.Users        // new method called ExecuteUpdateAsync so fast
             .Where(u => u.Id == userId)
             .ExecuteUpdateAsync(setters =>
-                
+
                 setters
                 .SetProperty(u => u.FirstName, request.FirstName)
                 .SetProperty(u => u.LastName, request.LastName)
 
-                ,cancellationToken
+                , cancellationToken
             );
 
         return Result.Success();
@@ -273,7 +273,7 @@ public class UserService(UserManager<ApplicationUser> userManager,
 
         var result = await _userManager.ChangePasswordAsync(user!, request.CurrentPassword, request.NewPassword);
 
-        if(result.Succeeded)
+        if (result.Succeeded)
             return Result.Success();
 
         var error = result.Errors.First();

@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace SurveyBasket.Api.Contracts.Users;
+﻿namespace SurveyBasket.Api.Contracts.Users;
 
 public class CreateUserRequestValidator : AbstractValidator<CreateUserRequest>
 {

@@ -1,5 +1,5 @@
 ﻿namespace SurveyBasket.Api.Mapping;
-public static class MappingConfig 
+public static class MappingConfig
 {
     public static void RegisterMapsterConfiguration(this IServiceCollection services)
     {
@@ -32,7 +32,7 @@ public static class MappingConfig
             .Map(dest => dest.IsDisabled, src => src.user.IsDisabled)
             .Map(dest => dest.Roles, src => src.roles);
 
-        TypeAdapterConfig<CreateUserRequest , ApplicationUser>
+        TypeAdapterConfig<CreateUserRequest, ApplicationUser>
             .NewConfig()
             .Map(dest => dest.UserName, src => src.Email)
             .Map(dest => dest.EmailConfirmed, src => true);

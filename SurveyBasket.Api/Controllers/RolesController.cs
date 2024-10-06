@@ -32,7 +32,7 @@ public class RolesController(IRoleService roleService) : ControllerBase
     public async Task<IActionResult> AddAsync([FromBody] RollRequest request, CancellationToken cancellationToken)
     {
         var result = await _roleService.AddAsync(request, cancellationToken);
-        return result.IsSuccess ? CreatedAtAction(nameof(Get), new {result.Value.Id}, result.Value) : result.ToProblem();
+        return result.IsSuccess ? CreatedAtAction(nameof(Get), new { result.Value.Id }, result.Value) : result.ToProblem();
     }
 
     [HttpPut("{id}")]

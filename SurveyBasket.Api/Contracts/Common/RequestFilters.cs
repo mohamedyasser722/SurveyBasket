@@ -16,5 +16,5 @@ public record RequestFilters
     }
     public string? SearchValue { get; init; }
     public string? SortDirection { get; init; } = "ASC"; // Default value is "asc 
-    public string? SortColumn { get; init; }    
+    public string? SortColumn { get; init; }
 }

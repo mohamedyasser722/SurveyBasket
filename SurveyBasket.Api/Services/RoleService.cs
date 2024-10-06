@@ -1,6 +1,6 @@
 ﻿namespace SurveyBasket.Api.Services;
 
-public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationDbContext context) : IRoleService
+public class RoleService(RoleManager<ApplicationRole> roleManager, ApplicationDbContext context) : IRoleService
 {
     private readonly RoleManager<ApplicationRole> _roleManager = roleManager;
     private readonly ApplicationDbContext _context = context;
@@ -42,23 +42,23 @@ public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationD
 
         var validPermissions = Permissions.GetAllPermessions().ToHashSet();
 
-        if(request.Permissions.Except(validPermissions).Any())
+        if (request.Permissions.Except(validPermissions).Any())
             return Result.Failure<RoleDetailResponse>(RoleErrors.InvalidPermissions);
 
         var role = new ApplicationRole
         {
             Name = request.Name,
-            ConcurrencyStamp  = Guid.NewGuid().ToString()
+            ConcurrencyStamp = Guid.NewGuid().ToString()
         };
 
         var result = await _roleManager.CreateAsync(role);
 
-        if(!result.Succeeded)
+        if (!result.Succeeded)
         {
             var error = result.Errors.First();
-            return Result.Failure<RoleDetailResponse>(new Error(error.Code,error.Description,StatusCodes.Status400BadRequest));
+            return Result.Failure<RoleDetailResponse>(new Error(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
-        
+
 
         var permissions = request.Permissions.Select(permission => new IdentityRoleClaim<string>
         {
@@ -112,7 +112,7 @@ public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationD
         var existingClaims = await _context.RoleClaims
             .Where(rc => rc.RoleId == role.Id && rc.ClaimType == Permissions.Type)
             .ToListAsync();
-        
+
 
         // Determine the claims to remove, add, and keep
         var existingPermissions = existingClaims.Select(rc => rc.ClaimValue).ToHashSet();

@@ -49,8 +49,8 @@ public class ResultService(ApplicationDbContext context) : IResultService
 
     public async Task<Result<IEnumerable<VotesPerQuestionResponse>>> GetVotesPerQuestionAsync(int pollId, CancellationToken cancellationToken = default)
     {
-        bool isPollExist = await _context.Polls.AnyAsync(p => p.Id == pollId,cancellationToken);
-        if(!isPollExist)
+        bool isPollExist = await _context.Polls.AnyAsync(p => p.Id == pollId, cancellationToken);
+        if (!isPollExist)
             return Result.Failure<IEnumerable<VotesPerQuestionResponse>>(PollErrors.PollNotFound);
 
         // gets the votes per question without the zero count of answers

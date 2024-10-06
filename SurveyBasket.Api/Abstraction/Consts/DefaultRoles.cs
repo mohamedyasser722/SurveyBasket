@@ -15,6 +15,6 @@ public static class DefaultRoles
         public const string Id = "E77C8086-5256-430B-894D-0A4C4D84DA4C";
         public const string ConcurrencyStamp = "00B0718E-4A0A-4CC5-8E9B-CED22D02A022";
     }
-   
 
-}   
+
+}

@@ -9,11 +9,11 @@ public class ResultsController(IResultService resultService) : ControllerBase
 
 
     [HttpGet("row-data")]
-    public async Task<IActionResult> GetPollVotesAsync([FromRoute]int pollId, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetPollVotesAsync([FromRoute] int pollId, CancellationToken cancellationToken = default)
     {
         var result = await _resultService.GetPollVotesAsync(pollId, cancellationToken);
 
-       return result.IsSuccess? Ok(result.Value) : result.ToProblem();
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
 
     }
     [HttpGet("votes-per-day")]

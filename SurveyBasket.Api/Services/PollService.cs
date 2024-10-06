@@ -10,8 +10,8 @@ public class PollService(ApplicationDbContext context, INotificationService noti
 
     public async Task<IEnumerable<PollResponse>>? GetAllAsync(CancellationToken cancellationToken = default)
     {
-       var polls = await _polls.AsNoTracking().ToListAsync(cancellationToken);
-       return polls.Adapt<IEnumerable<PollResponse>>();
+        var polls = await _polls.AsNoTracking().ToListAsync(cancellationToken);
+        return polls.Adapt<IEnumerable<PollResponse>>();
     }
     public async Task<IEnumerable<PollResponse>> GetCurrentAsyncV1(CancellationToken cancellationToken = default)
     {

@@ -51,7 +51,7 @@ public class Program
         using var scope = scopeFactory.CreateScope();
         var notoficationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
 
-        RecurringJob.AddOrUpdate("SendNewPollsNotification", () =>  notoficationService.SendNewPollsNotification(null), Cron.Daily);
+        RecurringJob.AddOrUpdate("SendNewPollsNotification", () => notoficationService.SendNewPollsNotification(null), Cron.Daily);
 
         // Use CORS if needed
         app.UseCors();

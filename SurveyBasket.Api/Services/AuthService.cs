@@ -46,17 +46,17 @@ public class AuthService
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-        if(user.IsDisabled)
+        if (user.IsDisabled)
             return Result.Failure<AuthResponse>(UserErrors.UserIsDisabled);
 
         var result = await _signInManager.PasswordSignInAsync(user, password, false, true);
 
         if (result.Succeeded)
             return await GenerateAuthResponseAsync(user, cancellationToken);
-        
+
         _logger.LogWarning("Failed login attempt for Email: {Email}", email);
 
-        if(result.IsLockedOut)
+        if (result.IsLockedOut)
             return Result.Failure<AuthResponse>(UserErrors.LockedUser);
 
         return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
@@ -74,7 +74,7 @@ public class AuthService
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.UserNotFound);
 
-        if(user.IsDisabled)
+        if (user.IsDisabled)
             return Result.Failure<AuthResponse>(UserErrors.UserIsDisabled);
 
         if (user.LockoutEnd > DateTime.UtcNow)
@@ -143,7 +143,7 @@ public class AuthService
 
         // add this user to the default role in AspNetUserRoles table
 
-        result = await _userManager.AddToRoleAsync(user,DefaultRoles.Member.Name);
+        result = await _userManager.AddToRoleAsync(user, DefaultRoles.Member.Name);
         if (!result.Succeeded)
         {
             var error = result.Errors.FirstOrDefault();
@@ -223,8 +223,8 @@ public class AuthService
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user is null)
             return Result.Success(); // We don't want to leak information about the user's existence
-        if(!user.EmailConfirmed)
-            return Result.Failure(UserErrors.EmailNotConfirmed with { statusCode = StatusCodes.Status400BadRequest});
+        if (!user.EmailConfirmed)
+            return Result.Failure(UserErrors.EmailNotConfirmed with { statusCode = StatusCodes.Status400BadRequest });
 
         var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -353,14 +353,14 @@ public class AuthService
 
         BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email, "Survey Basket: Email Confirmation ✅", emailBody));
 
-        await Task.CompletedTask;   
+        await Task.CompletedTask;
     }
 
     private async Task sendResetPasswordEmail(ApplicationUser user, string code)
     {
         var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
         //var baseUrl = _configuration["AppSettings:BaseUrl"];
-        var emailBody = EmailBodyBuilder.GenerateEmailBody("ForgetPassword", 
+        var emailBody = EmailBodyBuilder.GenerateEmailBody("ForgetPassword",
 
                 new Dictionary<string, string>
                 {
@@ -372,7 +372,7 @@ public class AuthService
 
         BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email, "Survey Basket: Reset Password 🔄", emailBody));
 
-        await Task.CompletedTask; 
+        await Task.CompletedTask;
     }
 
 }

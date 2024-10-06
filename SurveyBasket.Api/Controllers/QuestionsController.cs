@@ -29,7 +29,7 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
 
     [HttpPost]
     [HasPermission(Permissions.AddQuestions)]
-    public async Task<IActionResult> Add([FromRoute]int pollId,[FromBody] QuestionRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Add([FromRoute] int pollId, [FromBody] QuestionRequest request, CancellationToken cancellationToken)
     {
         var result = await _questionService.AddAsync(pollId, request, cancellationToken);
         if (result.IsFailure)

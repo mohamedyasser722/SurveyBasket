@@ -52,7 +52,7 @@ namespace SurveyBasket.Api.Controllers
         public async Task<IActionResult> Add([FromBody] PollRequest request, CancellationToken cancellationToken)
         {
             var pollResult = await _pollService.AddAsync(request, cancellationToken);
-            if(pollResult.IsFailure)
+            if (pollResult.IsFailure)
                 return pollResult.ToProblem();
 
             var pollResponse = pollResult.Value;

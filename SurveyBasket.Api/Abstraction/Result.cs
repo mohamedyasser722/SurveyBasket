@@ -7,8 +7,8 @@ public class Result
     public Error Error { get; } = default!;
 
     public Result(bool isSuccess, Error error)
-    {                                                   
-        if((isSuccess && error != Error.None) || (!isSuccess && error == Error.None)) 
+    {
+        if ((isSuccess && error != Error.None) || (!isSuccess && error == Error.None))
             throw new InvalidOperationException();
 
         IsSuccess = isSuccess;
@@ -30,6 +30,6 @@ public class Result<T> : Result
         _Value = value;
     }
 
-    public T Value => IsSuccess ? _Value! : throw new InvalidOperationException("Failure results can't have value"); 
+    public T Value => IsSuccess ? _Value! : throw new InvalidOperationException("Failure results can't have value");
 
 }

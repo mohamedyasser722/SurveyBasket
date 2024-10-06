@@ -4,7 +4,7 @@ public static class ResultExtensions
 {
     public static ObjectResult ToProblem(this Result result)
     {
-        if(result.IsSuccess)
+        if (result.IsSuccess)
             throw new InvalidOperationException("Can't create problem response for successful result");
 
         var problem = Results.Problem(statusCode: result.Error.statusCode);

@@ -9,7 +9,7 @@ public class QuestionRequestValidator : AbstractValidator<QuestionRequest>
 
         RuleFor(x => x.Content)
             .NotEmpty()
-            .Length(3,1000)
+            .Length(3, 1000)
             .When(x => x.Content != null);
 
         RuleFor(x => x.Answers)

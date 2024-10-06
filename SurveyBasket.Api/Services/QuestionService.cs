@@ -8,22 +8,22 @@ public class QuestionService(ApplicationDbContext context, ICacheService cacheSe
     private const string CachePrefix = "availableQuestions";
 
 
-    public async Task<Result<PaginatedList<QuestionResponse>>> GetAllAsync(int pollId,RequestFilters filters, CancellationToken cancellationToken = default)
+    public async Task<Result<PaginatedList<QuestionResponse>>> GetAllAsync(int pollId, RequestFilters filters, CancellationToken cancellationToken = default)
     {
 
         bool isPollExists = await _context.Polls.AnyAsync(p => p.Id == pollId, cancellationToken);
 
-        if(!isPollExists)
+        if (!isPollExists)
             return Result.Failure<PaginatedList<QuestionResponse>>(PollErrors.PollNotFound);
 
         var query = _context.Questions
             .Where(p => p.PollId == pollId);
 
 
-        if(!string.IsNullOrEmpty(filters.SearchValue))
+        if (!string.IsNullOrEmpty(filters.SearchValue))
             query = query.Where(q => q.Content.Contains(filters.SearchValue));
 
-        if(!string.IsNullOrEmpty(filters.SortColumn))
+        if (!string.IsNullOrEmpty(filters.SortColumn))
             query = query.OrderBy($"{filters.SortColumn} {filters.SortDirection}"); // using System.Linq.Dynamic.Core to sort the query based on string values
 
 
@@ -50,7 +50,7 @@ public class QuestionService(ApplicationDbContext context, ICacheService cacheSe
             return Result.Failure<IEnumerable<QuestionResponse>>(VoteErrors.DuplicatedVoted);
 
         // check if the poll exists and published and not expired
-        bool isPollExists = await _context.Polls.AnyAsync(p => p.Id == pollId && p.IsPublished && 
+        bool isPollExists = await _context.Polls.AnyAsync(p => p.Id == pollId && p.IsPublished &&
                                                             (p.StartsAt <= DateTime.UtcNow && p.EndsAt >= DateTime.UtcNow)
                                                             , cancellationToken);
         if (!isPollExists)
@@ -143,7 +143,7 @@ public class QuestionService(ApplicationDbContext context, ICacheService cacheSe
         // check if the content is duplicated
         bool isDuplicated = await _context.Questions.AnyAsync(q => q.PollId == pollId && q.Content == request.Content && q.Id != questionId, cancellationToken);
 
-        
+
 
         if (isDuplicated)
             return Result.Failure(QuestionErrors.DuplicatedQuestionContent);

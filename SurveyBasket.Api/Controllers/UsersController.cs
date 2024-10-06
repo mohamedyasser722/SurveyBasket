@@ -14,7 +14,7 @@ public class UsersController(IUserService userService) : ControllerBase
         return Ok(users);
     }
     [HttpGet]
-    [Route("{Id}")] 
+    [Route("{Id}")]
     [HasPermission(Permissions.GetUsers)]
     public async Task<IActionResult> Get([FromRoute] string Id, CancellationToken cancellationToken)
     {

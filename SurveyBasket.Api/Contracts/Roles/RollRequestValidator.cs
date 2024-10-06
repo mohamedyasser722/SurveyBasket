@@ -17,6 +17,6 @@ public class RollRequestValidator : AbstractValidator<RollRequest>
         RuleFor(x => x.Permissions)
             .Must(x => x.Distinct().Count() == x.Count) // Check for duplicate permissions
             .WithMessage("You can't add duplicate permissions for the same role")
-            .When(x => x.Permissions != null);                  
+            .When(x => x.Permissions != null);
     }
 }

@@ -1,6 +1,4 @@
-﻿using SurveyBasket.Api.Entities;
-
-namespace SurveyBasket.Api.Services.Services.Interfaces;
+﻿namespace SurveyBasket.Api.Services.Services.Interfaces;
 
 public interface IPollService
 {
