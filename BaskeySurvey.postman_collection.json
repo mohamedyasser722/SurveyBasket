@@ -531,7 +531,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "{{host}}/api/v1/polls/8/Questions/1/toggleStatus",
+							"raw": "{{host}}/api/v1/polls/8/Questions/1/toggle-status",
 							"host": [
 								"{{host}}"
 							],
@@ -542,7 +542,7 @@
 								"8",
 								"Questions",
 								"1",
-								"toggleStatus"
+								"toggle-status"
 							]
 						}
 					},
@@ -1132,7 +1132,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3YTFiMzI1ZC00M2RkLTQ3YjAtYTBmMy1kNjkzOGNlMGMwOGMiLCJlbWFpbCI6Im1vaGFtZWR5YXNzZXI3MjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1vaGFtZWQiLCJmYW1pbHlfbmFtZSI6Illhc3NlciIsImp0aSI6ImQ1NjhmMWYzLTc3MDQtNDNlOS04ZWVjLTUyMDMxODNjNjYzMyIsInJvbGVzIjpbIlBvbGxNYW5hZ2VyIiwiTWVtYmVyIl0sInBlcm1pc3Npb25zIjpbInBvbGxzOmFkZCIsInBvbGxzOmRlbGV0ZSIsInBvbGxzOnJlYWQiLCJwb2xsczp1cGRhdGUiXSwiZXhwIjoxNzI3ODgxNTA0LCJpc3MiOiJTdXJ2ZXlCYXNrZXRBcHAiLCJhdWQiOiJTdXJ2ZXlCYXNrZXRBcHAgVXNlcnMifQ.cwdfyTIQejdgpwCNWvTzqNucl6z5V8UsVITCjWvbCdc",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3YTFiMzI1ZC00M2RkLTQ3YjAtYTBmMy1kNjkzOGNlMGMwOGMiLCJlbWFpbCI6Im1vaGFtZWR5YXNzZXI3MjJAZ21haWwuY29tIiwiZ2l2ZW5fbmFtZSI6Ik1vaGFtZWQiLCJmYW1pbHlfbmFtZSI6IkhhbWR5IiwianRpIjoiZjE3NzA3NzUtMGZmNC00NDZmLTlkMWUtOGZkZWJkODgxNmMwIiwicm9sZXMiOlsiUG9sbE1hbmFnZXIiLCJNZW1iZXIiXSwicGVybWlzc2lvbnMiOlsicG9sbHM6YWRkIiwicG9sbHM6ZGVsZXRlIiwicG9sbHM6cmVhZCIsInBvbGxzOnVwZGF0ZSJdLCJleHAiOjE3Mjc4ODU3MzQsImlzcyI6IlN1cnZleUJhc2tldEFwcCIsImF1ZCI6IlN1cnZleUJhc2tldEFwcCBVc2VycyJ9.8P6rt5r_IPfBwRNvBaMabXlrejHgWi17xg115sTgOgI",
 				"type": "string"
 			}
 		]
