@@ -1,6 +1,4 @@
 ﻿
-using SurveyBasket.Api.Entities;
-using SurveyBasket.Api.Services.Services.Interfaces;
 
 namespace SurveyBasket.Api.Services;
 

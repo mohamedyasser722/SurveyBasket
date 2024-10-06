@@ -1,7 +1,4 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-
-namespace SurveyBasket.Api.Services;
+﻿namespace SurveyBasket.Api.Services;
 
 public class EmailService(IOptions<MailSettings> mailOptions, ILogger<EmailService> logger) : IEmailSender
 {

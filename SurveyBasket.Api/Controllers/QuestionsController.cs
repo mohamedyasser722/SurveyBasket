@@ -1,8 +1,4 @@
-﻿
-using SurveyBasket.Api.Contracts.Common;
-using SurveyBasket.Api.Services.Services.Interfaces;
-
-namespace SurveyBasket.Api.Controllers;
+﻿namespace SurveyBasket.Api.Controllers;
 
 [Route("api/v{v:apiVersion}/polls/{pollId}/[controller]")]
 [ApiController]

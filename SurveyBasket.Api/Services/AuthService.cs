@@ -1,12 +1,4 @@
-﻿
-using Hangfire;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using SurveyBasket.Api.Abstraction;
-using SurveyBasket.Api.Helpers;
-using SurveyBasket.Api.Services.Services.Interfaces;
-
-namespace SurveyBasket.Api.Services;
+﻿namespace SurveyBasket.Api.Services;
 
 public class AuthService
 

@@ -1,10 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore;
-using SurveyBasket.Api.Entities;
-using SurveyBasket.Api.Services.Services.Interfaces;
-using System.Linq;
-
-namespace SurveyBasket.Api.Services;
+﻿namespace SurveyBasket.Api.Services;
 
 public class ResultService(ApplicationDbContext context) : IResultService
 {

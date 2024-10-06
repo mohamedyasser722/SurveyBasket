@@ -1,7 +1,4 @@
-﻿using System;
-using System.Reflection;
-
-namespace SurveyBasket.Api.Mapping;
+﻿namespace SurveyBasket.Api.Mapping;
 public static class MappingConfig 
 {
     public static void RegisterMapsterConfiguration(this IServiceCollection services)

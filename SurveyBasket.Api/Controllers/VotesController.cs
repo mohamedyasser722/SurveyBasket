@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
-using Microsoft.AspNetCore.RateLimiting;
-using SurveyBasket.Api.Services.Services.Interfaces;
-
-namespace SurveyBasket.Api.Controllers;
+﻿namespace SurveyBasket.Api.Controllers;
 [Route("api/v{v:apiVersion}/polls/{pollId}/vote")]
 [ApiController]
 [Authorize(Roles = DefaultRoles.Member.Name)]

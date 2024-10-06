@@ -1,8 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
-
-namespace SurveyBasket.Api.Contracts.Polls;
+﻿namespace SurveyBasket.Api.Contracts.Polls;
 
 public class LoginRequestValidator : AbstractValidator<PollRequest>
 {

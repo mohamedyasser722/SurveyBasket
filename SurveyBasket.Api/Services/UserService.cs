@@ -1,6 +1,4 @@
 ﻿
-using System.Threading;
-
 namespace SurveyBasket.Api.Services;
 
 public class UserService(UserManager<ApplicationUser> userManager,

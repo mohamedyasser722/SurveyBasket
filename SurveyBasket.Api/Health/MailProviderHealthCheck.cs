@@ -1,10 +1,4 @@
-﻿using MailKit.Security;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Serilog.Core;
-using System.Net.Mail;
-using MailKit.Net.Smtp;
-
-namespace SurveyBasket.Api.Health;
+﻿namespace SurveyBasket.Api.Health;
 
 
 public class MailProviderHealthCheck(IOptions<MailSettings> mailSettings) : IHealthCheck

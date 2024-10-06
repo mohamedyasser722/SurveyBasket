@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
-namespace SurveyBasket.Api.Controllers;
+﻿namespace SurveyBasket.Api.Controllers;
 [Route("api/v{v:apiVersion}/[controller]")]
 [ApiController]
 public class UsersController(IUserService userService) : ControllerBase

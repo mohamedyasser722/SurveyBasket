@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SurveyBasket.Api.Services.Services.Interfaces;
-
+﻿
 namespace SurveyBasket.Api.Controllers;
 [Route("api/v{v:apiVersion}/polls/{pollId}/[controller]")]
 [ApiController]

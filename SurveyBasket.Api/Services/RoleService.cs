@@ -1,6 +1,4 @@
-﻿using SurveyBasket.Api.Contracts.Roles;
-
-namespace SurveyBasket.Api.Services;
+﻿namespace SurveyBasket.Api.Services;
 
 public class RoleService(RoleManager<ApplicationRole> roleManager,  ApplicationDbContext context) : IRoleService
 {

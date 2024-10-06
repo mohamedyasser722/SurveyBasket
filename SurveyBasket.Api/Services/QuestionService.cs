@@ -1,7 +1,4 @@
-﻿using SurveyBasket.Api.Contracts.Answers;
-using SurveyBasket.Api.Contracts.Common;
-using System.Linq.Dynamic.Core; 
-namespace SurveyBasket.Api.Services;
+﻿namespace SurveyBasket.Api.Services;
 
 public class QuestionService(ApplicationDbContext context, ICacheService cacheService, ILogger<QuestionService> logger) : IQuestionService
 {

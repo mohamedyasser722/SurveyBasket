@@ -1,8 +1,4 @@
-﻿using Asp.Versioning;
-using Microsoft.AspNetCore.RateLimiting;
-using SurveyBasket.Api.Authentication.Filters;
-using SurveyBasket.Api.Contracts.Polls;
-using SurveyBasket.Api.Services.Services.Interfaces;
+﻿
 
 namespace SurveyBasket.Api.Controllers
 {

@@ -1,10 +1,5 @@
 ﻿namespace SurveyBasket.Api.Hangfire;
 
-using Microsoft.AspNetCore.Http;
-using System;
-using System.Text;
-using System.Threading.Tasks;
-
 public class HangfireCustomBasicAuthenticationFilter : IDashboardAuthorizationFilter
 {
     private readonly string _username;
